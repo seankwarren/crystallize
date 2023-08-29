@@ -1,0 +1,23 @@
+#main-content-wrapper {
+    width: calc(100vw - var(--sidebar-width));
+    height: calc(100vh - var(--header-height));
+    display: flex;
+    background-color: var(--dark-bg-color);
+}
+
+#main-left-sidebar {
+    width: 200px;
+    background: var(--main-bg-color);
+    border-right: var(--md-border-width) solid var(--light-bg-color);
+}
+
+#main-right-sidebar {
+    width: 200px;
+    background: var(--main-bg-color);
+    border-left: var(--md-border-width) solid var(--light-bg-color);
+}
+
+#main-window-container {
+    flex-grow: 1;
+    min-width: 300px;
+}

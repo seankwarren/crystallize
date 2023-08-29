@@ -1,0 +1,6 @@
+.nav-icon-container {
+    display: flex;
+    background-color: transparent;
+    border: none;
+    border-radius: var(--sm-border-radius);
+}

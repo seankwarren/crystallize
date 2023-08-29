@@ -1,0 +1,49 @@
+body {
+    /* background colors */
+    --dark-bg-color: rgb(30, 30, 30);
+    --dark-bg-color-hover: rgb(40, 40, 40);
+    --main-bg-color: rgb(38, 38, 38);
+    --main-bg-color-hover: rgb(48, 48, 48);
+    --light-bg-color: rgb(54, 54, 54);
+    --light-bg-color-hover: rgb(64, 64, 64);
+    --red: rgb(251, 70, 76);
+    --accent: rgb(125, 91, 237);
+
+    /* font colors */
+    --primary-font-color: rgb(218, 218, 218);
+
+    /* layout sizes */
+    --header-height: 40px;
+    --sidebar-width: 46px;
+    --modal-max-width: 600px;
+    --modal-max-height: 400px;
+    --modal-min-width: 300px;
+    --modal-min-height: 200px;
+    --sm-spacing: 8px;
+    --md-spacing: 20px;
+    --icon-size: 18px;
+
+    /* radii */
+    --sm-border-radius: 4px;
+    --md-border-radius: 8px;
+    --lg-border-radius: 12px;
+
+    /* borders */
+    --light-border-color: rgb(85, 85, 85);
+    --sm-border-width: 0.5px;
+    --md-border-width: 1px;
+    --lg-border-width: 1.5px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--primary-font-color);
+    background-color: var(--main-bg-color);
+}
+
+#app-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+}
