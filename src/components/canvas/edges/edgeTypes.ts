@@ -1,9 +1,9 @@
-import BaseEdge from './BaseEdge';
+import CustomEdge from './CustomEdge';
 
 export type EdgeTypes = keyof typeof edgeTypes;
 
 const edgeTypes = {
-    base: BaseEdge,
+    base: CustomEdge,
 };
 
 export default edgeTypes;

@@ -1,4 +1,4 @@
-import { useNavigationStore } from '../../stores/navigation';
+import { useNavigationStore } from '@stores/navigation';
 
 const useHeaderMenuControls = () => {
     const headerMenuExpanded = useNavigationStore(

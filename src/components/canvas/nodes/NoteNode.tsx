@@ -1,7 +1,5 @@
 
-type Props = {}
-
-const NoteNode = (props: Props) => {
+const NoteNode = () => {
     return (
         <div>NoteNode</div>
     )

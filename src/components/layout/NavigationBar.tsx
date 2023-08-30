@@ -1,19 +1,19 @@
-import { useState } from "react";
-import "./NavigationBar.css";
-import NavigationIcon from "./NavigationIcon";
+import { useState } from 'react';
+import NavigationIcon from './NavigationIcon';
+import './styles/NavigationBar.css';
 
 const NavigationBar = () => {
 
     const [isOpenVaultHovered, setIsOpenVaultHovered] = useState<boolean>(false);
-    const handleOpenQuickSwitcher = () => { console.log("handleOpenQuickSwitcher") }
-    const handleOpenGraphView = () => { console.log("handleOpenGraphView") }
-    const handleCreateNewCanvas = () => { console.log("handleCreateNewCanvas") }
-    const handleOpenDailyNote = () => { console.log("handleOpenDailyNote") }
-    const handleInsertTemplate = () => { console.log("handleInsertTemplate") }
-    const handleOpenCommandPalette = () => { console.log("handleOpenCommandPalette") }
-    const handleOpenVault = () => { console.log("handleOpenVault") }
-    const handleOpenHelp = () => { console.log("handleOpenHelp") }
-    const handleOpenSettings = () => { console.log("handleOpenSettings") }
+    const handleOpenQuickSwitcher = () => { console.log('handleOpenQuickSwitcher') }
+    const handleOpenGraphView = () => { console.log('handleOpenGraphView') }
+    const handleCreateNewCanvas = () => { console.log('handleCreateNewCanvas') }
+    const handleOpenDailyNote = () => { console.log('handleOpenDailyNote') }
+    const handleInsertTemplate = () => { console.log('handleInsertTemplate') }
+    const handleOpenCommandPalette = () => { console.log('handleOpenCommandPalette') }
+    const handleOpenVault = () => { console.log('handleOpenVault') }
+    const handleOpenHelp = () => { console.log('handleOpenHelp') }
+    const handleOpenSettings = () => { console.log('handleOpenSettings') }
 
     return (
         <div id="navbar-wrapper">
@@ -51,11 +51,11 @@ const NavigationBar = () => {
             </div>
             <div id="navbar-bottom">
                 <NavigationIcon
-                    icon={isOpenVaultHovered ? "PackageOpen" : "Package"}
+                    icon={isOpenVaultHovered ? 'PackageOpen' : 'Package'}
                     className="navbar-icon"
                     ariaLabel="open package"
-                    onMouseEnter={() => setIsOpenVaultHovered(true)}
-                    onMouseLeave={() => setIsOpenVaultHovered(false)}
+                    onMouseEnter={() => { setIsOpenVaultHovered(true) }}
+                    onMouseLeave={() => { setIsOpenVaultHovered(false) }}
                     onClick={handleOpenVault} />
                 <NavigationIcon
                     icon="HelpCircle"

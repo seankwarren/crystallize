@@ -1,6 +1,7 @@
-import Sidebar from "../generic/Sidebar";
-import useSidebarControls from "../hooks/useSidebarControls";
-import "./Content.css";
+import CanvasWithProvider from '@components/canvas/CanvasWithProvider';
+import Sidebar from '@components/generic/Sidebar';
+import useSidebarControls from '@components/hooks/useSidebarControls';
+import './styles/Content.css';
 
 const Content = () => {
 
@@ -24,7 +25,9 @@ const Content = () => {
                     width={leftSidebarWidth}
                     handleSaveWidth={setLeftSidebarWidth}
                     toggleSidebar={toggleLeftSidebar} />}
-            <div id="main-window-container"></div>
+            <div id="main-window-container">
+                <CanvasWithProvider />
+            </div>
             {rightSidebarOpen &&
                 <Sidebar
                     id="main-right-sidebar"

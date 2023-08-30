@@ -1,9 +1,9 @@
-import { ReactNode, useRef } from "react";
-import useResizable from "../hooks/useResizable";
-import "./Sidebar.css";
+import useResizable from '@components/hooks/useResizable';
+import { ReactNode, useRef } from 'react';
+import './styles/Sidebar.css';
 
 type Props = {
-    side?: "left" | "right",
+    side?: 'left' | 'right',
     width?: number;
     resizable?: boolean;
     handleSaveWidth: (width: number) => void;
@@ -14,7 +14,7 @@ type Props = {
 }
 
 const Sidebar = ({
-    side = "left",
+    side = 'left',
     width = 200,
     resizable = true,
     handleSaveWidth,
@@ -39,7 +39,7 @@ const Sidebar = ({
             className={`sidebar sidebar-${side} ${className}`}
             ref={sidebarRef}
             style={{ width: sidebarWidth }}
-            onMouseDown={(e) => e.preventDefault()}>
+            onMouseDown={(e) => { e.preventDefault() }}>
             <div className="sidebar-content">{children}</div>
             {resizable &&
                 <div

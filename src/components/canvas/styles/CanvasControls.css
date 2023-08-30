@@ -1,0 +1,22 @@
+.canvas-controls {
+}
+
+.canvas-controls-section {
+    display: flex;
+    background-color: var(--light-bg-color);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1px;
+    margin: var(--sm-spacing) 0px;
+    border-radius: var(--sm-border-radius);
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+}
+
+.canvas-controls-section:first-of-type {
+    margin-top: 0;
+}
+
+.canvas-controls-section:last-of-type {
+    margin-bottom: 0;
+}

@@ -1,4 +1,4 @@
-import { useLayoutStore } from '../../stores/layout';
+import { useLayoutStore } from '@stores/layout';
 
 const useWindowControls = () => {
     const handleMinimize = useLayoutStore((state) => state.handleMinimize);

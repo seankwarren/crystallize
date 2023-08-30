@@ -22,17 +22,17 @@ const useResizable = ({
     const [isResizing, setIsResizing] = useState(false);
     const [sidebarWidth, setSidebarWidth] = useState(initialWidth);
 
-    const startResizing = useCallback((_e: React.MouseEvent) => {
+    const startResizing = useCallback(() => {
         setIsResizing(true);
     }, []);
 
-    const stopResizing = useCallback((_e: MouseEvent) => {
+    const stopResizing = useCallback(() => {
         setIsResizing(false);
     }, []);
 
     const resize = useCallback(
         (e: MouseEvent) => {
-            if (isResizing && sidebarRef?.current) {
+            if (isResizing && sidebarRef.current) {
                 const rect = sidebarRef.current.getBoundingClientRect();
 
                 let newWidth;
@@ -51,7 +51,7 @@ const useResizable = ({
                 }
             }
         },
-        [isResizing]
+        [anchorSide, maxWidth, minWidth, sidebarRef, toggleSidebar, isResizing]
     );
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const useResizable = ({
 
     useEffect(() => {
         handleSaveWidth(sidebarWidth);
-    }, [sidebarWidth]);
+    }, [sidebarWidth, handleSaveWidth]);
 
     return { sidebarWidth, startResizing };
 };

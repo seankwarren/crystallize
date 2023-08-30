@@ -39,7 +39,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    margin: var(--md-spacing);
+    margin: var(--lg-spacing);
     overflow: hidden;
     flex-grow: 1;
 }
@@ -62,8 +62,8 @@
     margin-top: var(--sm-spacing);
     margin-right: var(--sm-spacing);
     padding: 0px;
-}
 
-#modal-close-container:hover {
-    background-color: var(--main-bg-color-hover);
+    &:hover {
+        background-color: var(--main-bg-color-hover);
+    }
 }

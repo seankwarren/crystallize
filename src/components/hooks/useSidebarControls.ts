@@ -1,4 +1,4 @@
-import { useLayoutStore } from '../../stores/layout';
+import { useLayoutStore } from '@stores/layout';
 
 const useSidebarControls = () => {
     const leftSidebarOpen = useLayoutStore((state) => state.leftSidebarOpen);

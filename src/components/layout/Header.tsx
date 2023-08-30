@@ -1,9 +1,9 @@
-import useHeaderMenuControls from "../hooks/useHeaderMenuControls";
-import useModalControls from "../hooks/useModalControls";
-import useSidebarControls from "../hooks/useSidebarControls";
-import useWindowControls from "../hooks/useWindowControls";
-import "./Header.css";
-import NavigationIcon from "./NavigationIcon";
+import useHeaderMenuControls from '@components/hooks/useHeaderMenuControls';
+import useModalControls from '@components/hooks/useModalControls';
+import useSidebarControls from '@components/hooks/useSidebarControls';
+import useWindowControls from '@components/hooks/useWindowControls';
+import NavigationIcon from './NavigationIcon';
+import './styles/Header.css';
 
 const Header = () => {
     const openSearchOptions = () => { }
@@ -36,7 +36,7 @@ const Header = () => {
 
     const handleOpenTestModal = () => {
         handleOpenModal();
-        setModalTitle("Header Menu");
+        setModalTitle('Header Menu');
         setModalContents(testText);
         setShowModalClose(false);
     }
@@ -74,7 +74,7 @@ const Header = () => {
                 <div
                     id="tabs-container"
                     style={{
-                        marginRight: rightSidebarOpen ? 0 : "calc(calc(var(--icon-size) + calc(var(--sm-spacing) * 3)) * 3)"
+                        marginRight: rightSidebarOpen ? 0 : 'calc(calc(var(--icon-size) + calc(var(--sm-spacing) * 3)) * 3)'
                     }}>
                     <NavigationIcon
                         icon="ChevronDown"

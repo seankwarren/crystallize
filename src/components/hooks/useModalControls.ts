@@ -1,4 +1,4 @@
-import { useModalStore } from '../../stores/modal';
+import { useModalStore } from '@stores/modal';
 
 const useModalControls = () => {
     const handleOpenModal = useModalStore((state) => state.handleOpenModal);

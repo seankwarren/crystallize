@@ -17,18 +17,18 @@
     width: 3px;
     position: relative;
     background-color: transparent;
-}
 
-.sidebar-resizer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -3px;
-    right: -3px;
-    bottom: 0;
-    background-color: transparent;
-}
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -3px;
+        right: -3px;
+        bottom: 0;
+        background-color: transparent;
+    }
 
-.sidebar-resizer:hover {
-    background-color: var(--accent);
+    &:hover {
+        background-color: var(--accent);
+    }
 }

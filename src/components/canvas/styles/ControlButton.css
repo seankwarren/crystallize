@@ -1,0 +1,18 @@
+.controls-button {
+    display: flex;
+    background-color: transparent;
+    border: none;
+    padding: calc(var(--sm-spacing) - 2px) var(--sm-spacing);
+}
+
+.controls-button:hover {
+    background-color: var(--light-bg-color-hover);
+}
+
+.controls-button:first-of-type {
+    border-radius: var(--sm-border-radius) var(--sm-border-radius) 0 0;
+}
+
+.controls-button:last-of-type {
+    border-radius: 0 0 var(--sm-border-radius) var(--sm-border-radius);
+}

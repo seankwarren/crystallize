@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
-import { useModalStore } from "../../stores/modal";
-import NavigationIcon from "../layout/NavigationIcon";
-import "./Modal.css";
+import NavigationIcon from '@components/layout/NavigationIcon';
+import { useModalStore } from '@stores/modal';
+import { ReactNode } from 'react';
+import './styles/Modal.css';
 
 type Props = {
     title?: string;
@@ -26,10 +26,10 @@ const Modal = ({
                 <div id="modal-background"
                     onClick={handleCloseModal}
                     style={{
-                        backgroundColor: !fadeBackground ? "transparent" : undefined
+                        backgroundColor: !fadeBackground ? 'transparent' : undefined
                     }} />
                 <div id="modal-container" onClick={handleCloseModal}>
-                    <div id="modal" onClick={(e) => e.stopPropagation()}>
+                    <div id="modal" onClick={(e) => { e.stopPropagation() }}>
                         <div id="modal-header">
                             {showModalClose && <NavigationIcon
                                 icon="X"

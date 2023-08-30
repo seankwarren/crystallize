@@ -53,14 +53,14 @@
     border: none;
     margin-right: calc(var(--sm-spacing) / 2);
     margin-left: calc(var(--sm-spacing) / 2);
-}
 
-.header-icon:first-of-type {
-    margin-left: var(--sm-spacing);
-}
+    &:first-of-type {
+        margin-left: var(--sm-spacing);
+    }
 
-.header-icon:last-of-type {
-    margin-right: var(--sm-spacing);
+    &:last-of-type {
+        margin-right: var(--sm-spacing);
+    }
 }
 
 .header-icon:hover {
@@ -71,14 +71,10 @@
     height: 100%;
     padding: 0px var(--sm-spacing);
     border-radius: 0;
-}
 
-.window-controls:hover {
-    height: 100%;
-}
-
-.window-controls.close:hover {
-    background-color: var(--red);
+    &.close:hover {
+        background-color: var(--red);
+    }
 }
 
 .header-sidebar-header {

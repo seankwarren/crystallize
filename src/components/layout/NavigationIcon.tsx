@@ -1,6 +1,6 @@
-import { MouseEventHandler } from "react";
-import Icon, { IconName } from "../generic/Icon";
-import "./NavigationIcon.css";
+import Icon, { IconName } from '@components/generic/Icon';
+import { MouseEventHandler } from 'react';
+import './styles/NavigationIcon.css';
 
 type Props = {
     icon: IconName;
@@ -16,9 +16,9 @@ type Props = {
 const NavigationIcon = ({
     icon,
     size,
-    id = "",
-    className = "",
-    ariaLabel = "",
+    id = '',
+    className = '',
+    ariaLabel = '',
     onClick = () => { },
     onMouseEnter = () => { },
     onMouseLeave = () => { },

@@ -9,9 +9,6 @@ type LayoutState = {
     toggleRightSidebar: () => void;
     rightSidebarWidth: number;
     setRightSidebarWidth: (width: number) => void;
-    modalOpen: boolean;
-    handleOpenModal: () => void;
-    handleCloseModal: () => void;
     handleMinimize: () => void;
     handleMaximize: () => void;
     handleClose: () => void;
@@ -38,15 +35,6 @@ export const useLayoutStore = create<LayoutState>()((set) => ({
     rightSidebarWidth: 200,
     setRightSidebarWidth: (width) => {
         set({ rightSidebarWidth: width });
-    },
-    modalOpen: false,
-    handleOpenModal: () => {
-        set({ modalOpen: true });
-        console.log('handleOpenModal');
-    },
-    handleCloseModal: () => {
-        set({ modalOpen: false });
-        console.log('handleCloseModal');
     },
     handleMinimize: () => {
         console.log('handleMinimize');

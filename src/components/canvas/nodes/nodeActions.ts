@@ -1,27 +1,27 @@
+import { ActionType, ActionsListType } from '@components/canvas/types';
 import { Node } from 'reactflow';
-import { ActionType, ActionsListType } from '../actions';
 import { NodeTypes } from './nodeTypes';
 
 const removeNode = (node: Node) => {
-    console.log(`removing node`, node);
+    console.log('removing node', node);
 };
 const openPalette = (node: Node) => {
-    console.log(`opening palette`, node);
+    console.log('opening palette', node);
 };
 const zoomToSelection = (node: Node) => {
-    console.log(`zooming to selection`, node);
+    console.log('zooming to selection', node);
 };
 const editNode = (node: Node) => {
-    console.log(`editing node`, node);
+    console.log('editing node', node);
 };
 const editLabel = (node: Node) => {
-    console.log(`editing label`, node);
+    console.log('editing label', node);
 };
 const alignChildren = (node: Node) => {
-    console.log(`aligning children`, node);
+    console.log('aligning children', node);
 };
 const setBackground = (node: Node) => {
-    console.log(`setting background`, node);
+    console.log('setting background', node);
 };
 
 type NodeActions = {

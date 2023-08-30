@@ -1,5 +1,5 @@
+import { ActionType, ActionsListType } from '@components/canvas/types';
 import { Edge } from 'reactflow';
-import { ActionType, ActionsListType } from '../actions';
 import { EdgeTypes } from './edgeTypes';
 
 type EdgeActions = {
@@ -11,19 +11,19 @@ type EdgeActions = {
 };
 
 const removeEdge = (edge: Edge) => {
-    console.log(`removing node`, edge);
+    console.log('removing node', edge);
 };
 const openPalette = (edge: Edge) => {
-    console.log(`opening palette`, edge);
+    console.log('opening palette', edge);
 };
 const zoomToSelection = (edge: Edge) => {
-    console.log(`zooming to selection`, edge);
+    console.log('zooming to selection', edge);
 };
 const editLineDirection = (edge: Edge) => {
-    console.log(`editing line direction`, edge);
+    console.log('editing line direction', edge);
 };
 const editLabel = (edge: Edge) => {
-    console.log(`editing label`, edge);
+    console.log('editing label', edge);
 };
 
 const EDGE_ACTIONS: EdgeActions = {

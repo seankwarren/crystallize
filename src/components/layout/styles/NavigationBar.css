@@ -27,8 +27,8 @@
 .navbar-icon {
     margin-top: calc(var(--sm-spacing) / 2);
     margin-bottom: calc(var(--sm-spacing) / 2);
-}
 
-.navbar-icon:hover {
-    background-color: var(--main-bg-color-hover);
+    &:hover {
+        background-color: var(--main-bg-color-hover);
+    }
 }
