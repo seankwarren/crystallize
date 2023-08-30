@@ -62,8 +62,8 @@
     margin-top: var(--sm-spacing);
     margin-right: var(--sm-spacing);
     padding: 0px;
+}
 
-    &:hover {
-        background-color: var(--main-bg-color-hover);
-    }
+#modal-close-container:hover {
+    background-color: var(--main-bg-color-hover);
 }

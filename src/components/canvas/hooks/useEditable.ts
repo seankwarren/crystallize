@@ -41,7 +41,7 @@ const useEditable = (takeSnapshot: () => void) => {
             takeSnapshot();
             setEdges(updatedEdges);
         },
-        [addEdge, setEdges]
+        [addEdge, setEdges, takeSnapshot]
     );
 
     return { onNodesChange, onEdgesChange, onConnect };

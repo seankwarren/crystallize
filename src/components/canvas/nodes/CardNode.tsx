@@ -9,7 +9,6 @@ const CardNode = () => {
     return (
         <div className="card node">
             <Handle type="target" position={Position.Top} />
-            CardNode
             <Handle type="source" position={Position.Bottom} />
         </div>
     )

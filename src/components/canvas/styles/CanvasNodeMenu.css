@@ -1,0 +1,25 @@
+.canvas-node-menu {
+    position: absolute;
+    bottom: var(--md-spacing);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background-color: var(--main-bg-color);
+    display: flex;
+    border-radius: var(--md-border-radius);
+    padding: 1px;
+}
+
+.canvas-node-drag-item {
+    padding: calc(var(--sm-spacing) / 2) var(--sm-spacing);
+}
+
+.vertical-hr {
+    width: 1px;
+    background-color: var(--md-border-color);
+    margin: var(--sm-spacing) 0;
+}
+
+svg {
+    display: block;
+}

@@ -2,6 +2,8 @@
     padding: var(--md-spacing);
     border: var(--xl-border-width) solid var(--lt-border-color);
     border-radius: var(--lg-border-radius);
+    min-width: var(--default-node-width);
+    min-height: var(--default-node-height);
 }
 
 .card.selected {

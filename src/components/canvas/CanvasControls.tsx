@@ -68,13 +68,10 @@ const Controls = ({
     }
 
     const onRedoHandler = () => {
-        console.log('redo')
         redo();
     }
 
     const onUndoHandler = () => {
-        console.log('undo')
-
         undo();
     }
 
@@ -91,7 +88,6 @@ const Controls = ({
         };
     }, []);
 
-    console.log(canUndo, canRedo)
     return (
         <>
             <CanvasOptions
@@ -155,7 +151,7 @@ const Controls = ({
                         className={`canvas-controls-redo ${canRedo ? 'disabled' : ''}`}
                         title="redo"
                         aria-label="redo">
-                        <Icon name="Redo2" size={controlIconSize} color={canUndo ? undefined : disabledMenuIconColor} />
+                        <Icon name="Redo2" size={controlIconSize} color={canRedo ? undefined : disabledMenuIconColor} />
                     </ControlButton>
                 </div>
                 <div className="canvas-controls-section">

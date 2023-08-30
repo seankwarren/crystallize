@@ -74,7 +74,7 @@ const Header = () => {
                 <div
                     id="tabs-container"
                     style={{
-                        marginRight: rightSidebarOpen ? 0 : 'calc(calc(var(--icon-size) + calc(var(--sm-spacing) * 3)) * 3)'
+                        marginRight: rightSidebarOpen ? 0 : 'calc(calc(var(--md-icon-size) + calc(var(--sm-spacing) * 3)) * 3)'
                     }}>
                     <NavigationIcon
                         icon="ChevronDown"
