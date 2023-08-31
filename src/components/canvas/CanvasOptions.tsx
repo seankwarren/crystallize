@@ -1,11 +1,12 @@
 import Icon, { IconName } from '@components/generic/Icon';
-import { useCanvasStore } from '@stores/canvas';
 import { CSSProperties } from 'react';
+import { CanvasState } from './hooks/useCanvasState';
 import './styles/CanvasOptions.css';
 import { menuIconSize } from './styles/styles';
 type Props = {
     closeMenu: () => void;
     style?: CSSProperties;
+    state: CanvasState;
 }
 
 const OptionIcon = (name: IconName, className: string = '') => {
@@ -13,7 +14,7 @@ const OptionIcon = (name: IconName, className: string = '') => {
         <Icon name={name} size={menuIconSize} color="var(--primary-font-color)" className={`menu-item-icon ${className}`} />
     )
 }
-const CanvasOptions = ({ closeMenu, style }: Props) => {
+const CanvasOptions = ({ closeMenu, style, state }: Props) => {
 
     const {
         snapToGrid,
@@ -22,7 +23,7 @@ const CanvasOptions = ({ closeMenu, style }: Props) => {
         toggleSnapToObjects,
         isInteractive,
         toggleIsInteractive
-    } = useCanvasStore();
+    } = state;
 
     return (
         <div className="canvas-options-menu" style={style}>

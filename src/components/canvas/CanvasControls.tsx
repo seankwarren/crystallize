@@ -2,16 +2,17 @@ import { Panel, useReactFlow } from '@reactflow/core';
 import { MouseEventHandler, useEffect, useState } from 'react';
 
 import Icon from '@components/generic/Icon';
-import { useCanvasStore } from '@stores/canvas';
 import { PanelPosition } from 'reactflow';
 import CanvasOptions from './CanvasOptions';
 import ControlButton from './ControlButton';
+import { CanvasState } from './hooks/useCanvasState';
 import './styles/CanvasControls.css';
 import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from './styles/styles';
 
 type Props = {
     className?: string
     position?: PanelPosition
+    state: CanvasState
     undo: () => void
     redo: () => void
     canUndo: boolean
@@ -21,6 +22,7 @@ type Props = {
 const Controls = ({
     className,
     position = 'top-right',
+    state,
     undo,
     redo,
     canUndo,
@@ -30,7 +32,7 @@ const Controls = ({
     const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
-    const { isInteractive, toggleIsInteractive, defaultZoom } = useCanvasStore();
+    const { isInteractive, toggleIsInteractive } = state;
     const { zoomIn, zoomOut, zoomTo, fitView } = useReactFlow();
 
     const onZoomInHandler = () => {
@@ -64,7 +66,7 @@ const Controls = ({
     }
 
     const onResetZoomHandler = () => {
-        zoomTo(defaultZoom);
+        zoomTo(1);
     }
 
     const onRedoHandler = () => {
@@ -92,6 +94,7 @@ const Controls = ({
         <>
             <CanvasOptions
                 closeMenu={onCloseMenu}
+                state={state}
                 style={{ ...menuPosition, display: isMenuVisible ? 'flex' : 'none' }} />
             <Panel
                 className={`canvas-controls ${className}`}
@@ -138,7 +141,7 @@ const Controls = ({
                         <Icon name="Minus" size={controlIconSize} />
                     </ControlButton>
                 </div>
-                <div className="canvas-controls-section">
+                {isInteractive && <div className="canvas-controls-section">
                     <ControlButton
                         onClick={() => { if (canUndo) onUndoHandler(); }}
                         className={`canvas-controls-undo ${canUndo ? 'disabled' : ''}`}
@@ -153,7 +156,7 @@ const Controls = ({
                         aria-label="redo">
                         <Icon name="Redo2" size={controlIconSize} color={canRedo ? undefined : disabledMenuIconColor} />
                     </ControlButton>
-                </div>
+                </div>}
                 <div className="canvas-controls-section">
                     <ControlButton
                         onClick={onOpenHelpModal}

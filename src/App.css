@@ -20,8 +20,8 @@ body {
     --modal-max-height: 400px;
     --modal-min-width: 300px;
     --modal-min-height: 200px;
-    --default-node-width: 140px; /* update .ts file */
-    --default-node-height: 30px; /* update .ts file */
+    --default-node-width: 180px; /* update .ts file */
+    --default-node-height: 60px; /* update .ts file */
     --sm-spacing: 8px;
     --md-spacing: 14px;
     --lg-spacing: 20px;

@@ -1,10 +1,14 @@
-import { useCanvasStore } from '@stores/canvas';
 import { useCallback } from 'react';
 import { Connection, Edge, EdgeChange, NodeChange } from 'reactflow';
+import { CanvasState } from './useCanvasState';
 
-const useEditable = (takeSnapshot: () => void) => {
-    const { setEdges, addEdge, applyNodeChanges, applyEdgeChanges } =
-        useCanvasStore();
+type Props = {
+    takeSnapshot: () => void;
+    state: CanvasState;
+};
+
+const useEditable = ({ takeSnapshot, state }: Props) => {
+    const { setEdges, addEdge, applyNodeChanges, applyEdgeChanges } = state;
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) => {

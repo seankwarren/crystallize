@@ -1,9 +1,10 @@
-import { useCanvasStore } from '@stores/canvas';
 import { useCallback, useState } from 'react';
 import { Edge, Node } from 'reactflow';
+import { CanvasState } from './useCanvasState';
 
 type UseUndoRedoOptions = {
     maxHistorySize?: number;
+    state: CanvasState;
 };
 
 type UseUndoRedo = (options: UseUndoRedoOptions) => {
@@ -19,12 +20,12 @@ type HistoryItem = {
     edges: Edge[];
 };
 
-export const useUndoRedo: UseUndoRedo = (props = {}) => {
-    const { maxHistorySize = 100 } = props;
+export const useUndoRedo: UseUndoRedo = (props: UseUndoRedoOptions) => {
+    const { maxHistorySize = 100, state } = props;
     const [past, setPast] = useState<HistoryItem[]>([]);
     const [future, setFuture] = useState<HistoryItem[]>([]);
 
-    const { nodes, setNodes, edges, setEdges } = useCanvasStore();
+    const { nodes, edges, setNodes, setEdges } = state;
 
     const takeSnapshot = useCallback(() => {
         setPast((past) => [

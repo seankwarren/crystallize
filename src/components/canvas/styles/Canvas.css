@@ -2,3 +2,7 @@
     width: 100%;
     height: 100%;
 }
+
+.canvas-container:not(:first-of-type) {
+    border-left: var(--sm-border-width) solid var(--md-border-color);
+}

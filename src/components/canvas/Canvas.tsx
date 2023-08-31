@@ -1,100 +1,54 @@
-import { useCanvasStore } from '@stores/canvas';
-import { DragEventHandler, useCallback, useEffect, useRef, useState } from 'react';
-import ReactFlow, { Background, Node, NodeDragHandler, OnEdgesDelete, OnNodesDelete, ReactFlowInstance, SelectionDragHandler, useReactFlow } from 'reactflow';
+import ReactFlow, { Background, ReactFlowInstance, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
 import CanvasControls from './CanvasControls';
 import CanvasNodeMenu from './CanvasNodeMenu';
 import { edgeTypes } from './edges';
 import initialEdges from './edges/initialEdges';
+import useCanvasState from './hooks/useCanvasState';
+import useDragAndDrop from './hooks/useDragAndDrop';
 import useEditable from './hooks/useEditable';
 import useUndoRedo from './hooks/useUndoRedo';
 import { nodeTypes } from './nodes';
 import initialNodes from './nodes/initialNodes';
 import './styles/Canvas.css';
-import { defaultNodeHeight, defaultNodeWidth, snapGridInterval } from './styles/styles';
-
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+import { snapGridInterval } from './styles/styles';
 
 const Canvas = () => {
+    const state = useCanvasState({});
+    const { nodes, setNodes, edges, setEdges, snapToGrid, isInteractive } = state;
     const {
-        nodes,
-        edges,
-        setNodes,
-        setEdges,
-        snapToGrid,
-        defaultZoom,
-        nodesDraggable,
-        nodesConnectable,
-    } = useCanvasStore();
+        undo,
+        redo,
+        canUndo,
+        canRedo,
+        takeSnapshot
+    } = useUndoRedo({ state });
 
-    const { undo, redo, canUndo, canRedo, takeSnapshot } = useUndoRedo({});
-    const { onNodesChange, onEdgesChange, onConnect } = useEditable(takeSnapshot);
-    const { zoomTo, project } = useReactFlow();
-    const [canvasInstance, setCanvasInstance] = useState<ReactFlowInstance | null>(null);
-    const canvasWrapper = useRef<HTMLDivElement>(null);
+    const {
+        setCanvasInstance,
+        canvasWrapper,
+        onNodeDragStart,
+        onSelectionDragStart,
+        onNodesDelete,
+        onEdgesDelete,
+        onDragOver,
+        onDrop,
+    } = useDragAndDrop({ takeSnapshot, nodes, setNodes });
 
-    useEffect(() => {
-        setNodes(initialNodes);
-        setEdges(initialEdges);
-    }, [setNodes, setEdges])
+    const {
+        onNodesChange,
+        onEdgesChange,
+        onConnect
+    } = useEditable({ state, takeSnapshot });
+
+    const { zoomTo } = useReactFlow();
 
     const onInit = ((instance: ReactFlowInstance) => {
-        setCanvasInstance(instance)
-        zoomTo(defaultZoom);
+        setNodes(initialNodes);
+        setEdges(initialEdges);
+        setCanvasInstance(instance);
+        zoomTo(1);
     })
-
-    const onNodeDragStart: NodeDragHandler = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
-
-    const onSelectionDragStart: SelectionDragHandler = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
-
-    const onNodesDelete: OnNodesDelete = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
-
-    const onEdgesDelete: OnEdgesDelete = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
-
-    const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'move';
-    };
-
-    const onDrop: DragEventHandler = useCallback(
-        (event) => {
-            event.preventDefault();
-
-            if (canvasWrapper.current && canvasInstance) {
-                takeSnapshot();
-                const reactFlowBounds = canvasWrapper.current.getBoundingClientRect();
-                const type = event.dataTransfer.getData('application/reactflow');
-
-                // check if the dropped element is valid
-                if (typeof type === 'undefined' || !type) {
-                    return;
-                }
-
-                const position = canvasInstance.project({
-                    x: event.clientX - reactFlowBounds.left - defaultNodeWidth,
-                    y: event.clientY - reactFlowBounds.top - defaultNodeHeight,
-                });
-                const newNode: Node = {
-                    id: getId(),
-                    type,
-                    position,
-                    data: { label: `${type} node` },
-                };
-
-                setNodes(nodes.concat(newNode));
-            }
-        },
-        [canvasInstance, nodes, setNodes, takeSnapshot]
-    );
 
     return (
         <div className="canvas-container" ref={canvasWrapper}>
@@ -111,8 +65,8 @@ const Canvas = () => {
                 proOptions={{
                     hideAttribution: true,
                 }}
-                nodesDraggable={nodesDraggable}
-                nodesConnectable={nodesConnectable}
+                nodesDraggable={isInteractive}
+                nodesConnectable={isInteractive}
                 onNodeDragStart={onNodeDragStart}
                 onSelectionDragStart={onSelectionDragStart}
                 onNodesDelete={onNodesDelete}
@@ -122,8 +76,8 @@ const Canvas = () => {
                 onDragOver={onDragOver}
                 fitView
                 className="canvas">
-                <Background className="canvas-background" gap={snapGridInterval} />
-                <CanvasControls className="canvas-controls" undo={undo} redo={redo} canUndo={canUndo} canRedo={canRedo} />
+                <Background className="canvas-background" gap={snapGridInterval} color="var(--md-border-color)" />
+                <CanvasControls className="canvas-controls" state={state} undo={undo} redo={redo} canUndo={canUndo} canRedo={canRedo} />
                 <CanvasNodeMenu />
             </ReactFlow>
         </div >
