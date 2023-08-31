@@ -8,36 +8,36 @@ import {
     SelectionDragHandler,
 } from 'reactflow';
 import { defaultNodeHeight, defaultNodeWidth } from '../styles/styles';
+import { CanvasState } from './useCanvasState';
 
 type Props = {
-    takeSnapshot: () => void;
-    nodes: Node[];
-    setNodes: (nodes: Node[]) => void;
+    state: CanvasState;
+    takeSnapshot: (state: CanvasState) => void;
 };
 
 let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getId = () => `dndnode_${id++}`; // TODO: make a getId function
 
-const useDragAndDrop = ({ takeSnapshot, nodes, setNodes }: Props) => {
+const useDragAndDrop = ({ state, takeSnapshot }: Props) => {
     const [canvasInstance, setCanvasInstance] =
         useState<ReactFlowInstance | null>(null);
     const canvasWrapper = useRef<HTMLDivElement>(null);
 
     const onNodeDragStart: NodeDragHandler = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
+        takeSnapshot(state);
+    }, [takeSnapshot, state]);
 
     const onSelectionDragStart: SelectionDragHandler = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
+        takeSnapshot(state);
+    }, [takeSnapshot, state]);
 
     const onNodesDelete: OnNodesDelete = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
+        takeSnapshot(state);
+    }, [takeSnapshot, state]);
 
     const onEdgesDelete: OnEdgesDelete = useCallback(() => {
-        takeSnapshot();
-    }, [takeSnapshot]);
+        takeSnapshot(state);
+    }, [takeSnapshot, state]);
 
     const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
         event.preventDefault();
@@ -49,7 +49,8 @@ const useDragAndDrop = ({ takeSnapshot, nodes, setNodes }: Props) => {
             event.preventDefault();
 
             if (canvasWrapper.current && canvasInstance) {
-                takeSnapshot();
+                takeSnapshot(state);
+
                 const reactFlowBounds =
                     canvasWrapper.current.getBoundingClientRect();
                 const type = event.dataTransfer.getData(
@@ -79,10 +80,10 @@ const useDragAndDrop = ({ takeSnapshot, nodes, setNodes }: Props) => {
                     data: { label: `${type} node` },
                 };
 
-                setNodes(nodes.concat(newNode));
+                state.addNode(newNode);
             }
         },
-        [canvasInstance, nodes, setNodes, takeSnapshot]
+        [canvasInstance, takeSnapshot, state]
     );
 
     return {

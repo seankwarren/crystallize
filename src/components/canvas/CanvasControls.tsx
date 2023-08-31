@@ -3,8 +3,7 @@ import { MouseEventHandler, useEffect, useState } from 'react';
 
 import Icon from '@components/generic/Icon';
 import { PanelPosition } from 'reactflow';
-import CanvasOptions from './CanvasOptions';
-import ControlButton from './ControlButton';
+import { CanvasOptions, ControlButton } from '.';
 import { CanvasState } from './hooks/useCanvasState';
 import './styles/CanvasControls.css';
 import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from './styles/styles';
@@ -13,13 +12,13 @@ type Props = {
     className?: string
     position?: PanelPosition
     state: CanvasState
-    undo: () => void
-    redo: () => void
+    undo: (state: CanvasState) => void
+    redo: (state: CanvasState) => void
     canUndo: boolean
     canRedo: boolean
 }
 
-const Controls = ({
+const CanvasControls = ({
     className,
     position = 'top-right',
     state,
@@ -70,11 +69,11 @@ const Controls = ({
     }
 
     const onRedoHandler = () => {
-        redo();
+        redo(state);
     }
 
     const onUndoHandler = () => {
-        undo();
+        undo(state);
     }
 
     const onOpenHelpModal = () => { }
@@ -171,4 +170,4 @@ const Controls = ({
     )
 }
 
-export default Controls;
+export default CanvasControls;

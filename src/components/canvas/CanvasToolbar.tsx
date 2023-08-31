@@ -1,9 +1,7 @@
 import NavigationIcon from '@components/layout/NavigationIcon';
 import { Edge, Node } from 'reactflow';
-import { edgeActionsByType } from './edges';
-import { EdgeTypes } from './edges/edgeTypes';
-import { nodeActionsByType } from './nodes';
-import { NodeTypes } from './nodes/nodeTypes';
+import { EdgeTypes, edgeActionsByType } from './edges';
+import { NodeTypes, nodeActionsByType } from './nodes';
 import './styles/CanvasToolbar.css';
 import { ActionsListType } from './types';
 

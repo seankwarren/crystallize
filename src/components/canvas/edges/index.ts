@@ -1,5 +1,7 @@
 import BaseEdge from './CustomEdge';
 import { edgeActionsByType } from './edgeActions';
-import edgeTypes from './edgeTypes';
+import edgeTypes, { EdgeTypes } from './edgeTypes';
+import initialEdges from './initialEdges';
 
-export { BaseEdge, edgeActionsByType, edgeTypes };
+export { BaseEdge, edgeActionsByType, edgeTypes, initialEdges };
+export type { EdgeTypes };

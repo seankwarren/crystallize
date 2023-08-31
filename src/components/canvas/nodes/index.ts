@@ -4,8 +4,9 @@ import CardNode from './CardNode';
 import GroupNode from './GroupNode';
 import ImageNode from './ImageNode';
 import NoteNode from './NoteNode';
+import initialNodes from './initialNodes';
 import { nodeActionsByType } from './nodeActions';
-import nodeTypes from './nodeTypes';
+import nodeTypes, { NodeTypes } from './nodeTypes';
 
 export {
     BaseNode,
@@ -14,6 +15,8 @@ export {
     GroupNode,
     ImageNode,
     NoteNode,
+    initialNodes,
     nodeActionsByType,
     nodeTypes,
 };
+export type { NodeTypes };

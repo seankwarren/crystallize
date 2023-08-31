@@ -1,28 +1,38 @@
 import ReactFlow, { Background, ReactFlowInstance, useReactFlow } from 'reactflow';
 import 'reactflow/dist/style.css';
-import CanvasControls from './CanvasControls';
-import CanvasNodeMenu from './CanvasNodeMenu';
-import { edgeTypes } from './edges';
-import initialEdges from './edges/initialEdges';
+import { CanvasControls, CanvasNodeMenu } from '.';
+import { edgeTypes, initialEdges } from './edges';
 import useCanvasState from './hooks/useCanvasState';
 import useDragAndDrop from './hooks/useDragAndDrop';
-import useEditable from './hooks/useEditable';
 import useUndoRedo from './hooks/useUndoRedo';
-import { nodeTypes } from './nodes';
-import initialNodes from './nodes/initialNodes';
+import { initialNodes, nodeTypes } from './nodes';
 import './styles/Canvas.css';
 import { snapGridInterval } from './styles/styles';
 
 const Canvas = () => {
-    const state = useCanvasState({});
-    const { nodes, setNodes, edges, setEdges, snapToGrid, isInteractive } = state;
+
     const {
         undo,
         redo,
         canUndo,
         canRedo,
         takeSnapshot
-    } = useUndoRedo({ state });
+    } = useUndoRedo({});
+
+    const state = useCanvasState({ takeSnapshot });
+
+    const {
+        nodes,
+        setNodes,
+        applyNodeChanges,
+        edges,
+        setEdges,
+        applyEdgeChanges,
+        onConnect,
+        snapToGrid,
+        isInteractive
+    } = state;
+
 
     const {
         setCanvasInstance,
@@ -33,13 +43,7 @@ const Canvas = () => {
         onEdgesDelete,
         onDragOver,
         onDrop,
-    } = useDragAndDrop({ takeSnapshot, nodes, setNodes });
-
-    const {
-        onNodesChange,
-        onEdgesChange,
-        onConnect
-    } = useEditable({ state, takeSnapshot });
+    } = useDragAndDrop({ state, takeSnapshot });
 
     const { zoomTo } = useReactFlow();
 
@@ -57,8 +61,8 @@ const Canvas = () => {
                 edges={edges}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
+                onNodesChange={applyNodeChanges}
+                onEdgesChange={applyEdgeChanges}
                 onConnect={onConnect}
                 snapGrid={[snapGridInterval, snapGridInterval]}
                 snapToGrid={snapToGrid}
@@ -76,8 +80,17 @@ const Canvas = () => {
                 onDragOver={onDragOver}
                 fitView
                 className="canvas">
-                <Background className="canvas-background" gap={snapGridInterval} color="var(--md-border-color)" />
-                <CanvasControls className="canvas-controls" state={state} undo={undo} redo={redo} canUndo={canUndo} canRedo={canRedo} />
+                <Background
+                    className="canvas-background"
+                    gap={snapGridInterval}
+                    color="var(--md-border-color)" />
+                <CanvasControls
+                    className="canvas-controls"
+                    state={state}
+                    undo={undo}
+                    redo={redo}
+                    canUndo={canUndo}
+                    canRedo={canRedo} />
                 <CanvasNodeMenu />
             </ReactFlow>
         </div >

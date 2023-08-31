@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import {
+    Connection,
     Edge,
     EdgeChange,
     Node,
@@ -21,6 +22,7 @@ export type CanvasState = {
     setEdges: (node: Edge[]) => Edge[];
     addEdge: (node: Edge) => Edge[];
     applyEdgeChanges: (changes: EdgeChange[]) => Edge[];
+    onConnect: (params: Edge | Connection) => void;
     toggleSnapToGrid: () => void;
     toggleSnapToObjects: () => void;
     toggleIsInteractive: () => void;
@@ -28,9 +30,10 @@ export type CanvasState = {
 
 type Props = {
     initialState?: CanvasState;
+    takeSnapshot: (state: CanvasState) => void;
 };
 
-const useCanvasState = ({ initialState }: Props): CanvasState => {
+const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasState => {
     const init = initialState || {
         nodes: [],
         edges: [],
@@ -45,13 +48,17 @@ const useCanvasState = ({ initialState }: Props): CanvasState => {
 
     const nodes = canvasState.nodes;
     const setNodes = (nodes: Node[]) => {
-        setCanvasState((prev) => ({ ...prev, nodes }));
+        setCanvasState((prev) => {
+            // takeSnapshot({ ...prev, nodes });
+            return { ...prev, nodes };
+        });
         return nodes;
     };
     const addNode = (node: Node) => {
-        setCanvasState({
-            ...canvasState,
-            nodes: [...nodes, node],
+        takeSnapshot(canvasState);
+        setCanvasState((prev) => {
+            takeSnapshot({ ...prev, nodes: [...nodes, node] });
+            return { ...prev, nodes: [...nodes, node] };
         });
         return [...nodes, node];
     };
@@ -63,16 +70,20 @@ const useCanvasState = ({ initialState }: Props): CanvasState => {
 
     const edges = canvasState.edges;
     const setEdges = (edges: Edge[]) => {
-        setCanvasState((prev) => ({ ...prev, edges }));
+        setCanvasState((prev) => {
+            // takeSnapshot(prev);
+            return { ...prev, edges };
+        });
         return edges;
     };
     const addEdge = (edge: Edge) => {
-        setCanvasState((prev) => ({
-            ...prev,
-            edges: [...prev.edges, edge],
-        }));
+        setCanvasState((prev) => {
+            takeSnapshot(prev);
+            return { ...prev, edges: [...prev.edges, edge] };
+        });
         return [...edges, edge];
     };
+
     const applyEdgeChanges = (changes: EdgeChange[]) => {
         const updatedEdges = _applyEdgeChanges(changes, edges);
         setEdges(updatedEdges);
@@ -100,6 +111,27 @@ const useCanvasState = ({ initialState }: Props): CanvasState => {
         }));
     };
 
+    const onConnect = (params: Edge | Connection): void => {
+        let edgeToAdd: Edge;
+
+        if ('id' in params) {
+            edgeToAdd = params;
+        } else {
+            const { source, sourceHandle, target, targetHandle } = params;
+            if (!source || !target) return; // connection not completed
+            edgeToAdd = {
+                id: `${source || sourceHandle}-${target || targetHandle}`,
+                source: source,
+                target: target,
+                sourceHandle: sourceHandle,
+                targetHandle: targetHandle,
+            };
+        }
+
+        const updatedEdges = addEdge(edgeToAdd);
+        setEdges(updatedEdges);
+    };
+
     return {
         nodes,
         setNodes,
@@ -109,6 +141,7 @@ const useCanvasState = ({ initialState }: Props): CanvasState => {
         setEdges,
         addEdge,
         applyEdgeChanges,
+        onConnect,
         snapToGrid,
         toggleSnapToGrid,
         snapToObjects,
