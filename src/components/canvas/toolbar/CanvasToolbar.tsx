@@ -19,7 +19,7 @@ const CanvasToolbar = ({ state }: Props) => {
 
     const { transform } = useStore(storeSelector);
 
-    const actions: ActionsListType = getAllowedToolbarActions(state.selectedNodes, state.selectedEdges);
+    const actions: ActionsListType = getAllowedToolbarActions(state);
 
     // if nodes are selected, position it based on them
     const position: XYPosition = { x: 0, y: 0 };

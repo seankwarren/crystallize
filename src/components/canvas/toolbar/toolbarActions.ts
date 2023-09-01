@@ -1,6 +1,7 @@
 import { ActionsListType } from '@components/canvas/types';
 import { Edge, Node } from 'reactflow';
 import { EdgeTypes } from '../edges';
+import { CanvasState } from '../hooks/useCanvasState';
 import { NodeTypes } from '../nodes';
 import { TOOLBAR_ACTIONS } from './TOOLBAR_ACTIONS';
 
@@ -23,16 +24,15 @@ const someTypesMatch = (
 };
 
 export const getAllowedToolbarActions = (
-    selectedNodes: Node[] = [],
-    selectedEdges: Edge[] = []
+    state: CanvasState
 ): ActionsListType => {
     const filteredActions = Object.entries(TOOLBAR_ACTIONS).filter(
         ([, action]) => {
-            const numNodes = selectedNodes.length;
-            const numEdges = selectedEdges.length;
+            const numNodes = state.selectedNodes.length;
+            const numEdges = state.selectedEdges.length;
 
             const allNodesMatchTypes = allTypesMatch(
-                selectedNodes,
+                state.selectedNodes,
                 action.allowedNodeTypes
             );
             // const allEdgesMatchTypes = allTypesMatch(
@@ -40,13 +40,17 @@ export const getAllowedToolbarActions = (
             //     action.allowedEdgeTypes
             // );
             const someNodesMatchTypes = someTypesMatch(
-                selectedNodes,
+                state.selectedNodes,
                 action.allowedNodeTypes
             );
             const someEdgesMatchTypes = someTypesMatch(
-                selectedEdges,
+                state.selectedEdges,
                 action.allowedEdgeTypes
             );
+
+            if (action.isEditAction && !state.isInteractive) {
+                return false;
+            }
 
             if (numNodes < 1 && numEdges < 1) {
                 // devLog(`${key} there are no selected elements`);
