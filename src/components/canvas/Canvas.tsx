@@ -1,12 +1,15 @@
-import { useCallback, useState } from 'react';
-import ReactFlow, { Background, ConnectionMode, Node, NodeChange, OnNodesChange, ReactFlowInstance, useOnSelectionChange, useReactFlow } from 'reactflow';
+import { useState } from 'react';
+import ReactFlow, {
+    Background,
+    ConnectionMode,
+    ReactFlowInstance,
+    useOnSelectionChange,
+    useReactFlow
+} from 'reactflow';
 import 'reactflow/dist/style.css';
 import { CanvasControls, CanvasNodeMenu } from '.';
 import { edgeTypes, initialEdges } from './edges';
-import useCanvasState from './hooks/useCanvasState';
-import useDragAndDrop from './hooks/useDragAndDrop';
-import useUndoRedo from './hooks/useUndoRedo';
-import { getHelperLines } from './hooks/utils';
+import { useCanvasState, useDragAndDrop, useUndoRedo } from './hooks';
 import { initialNodes, nodeTypes } from './nodes';
 import HelperLines from './overlays/CanvasHelperLines';
 import './styles/Canvas.css';
@@ -15,8 +18,8 @@ import { CanvasToolbar } from './toolbar';
 
 const Canvas = () => {
 
-    const [helperLineHorizontal, setHelperLineHorizontal] = useState<number | undefined>(undefined);
-    const [helperLineVertical, setHelperLineVertical] = useState<number | undefined>(undefined);
+    const [helperLineHorizontal,] = useState<number | undefined>(undefined);
+    const [helperLineVertical,] = useState<number | undefined>(undefined);
 
     const {
         undo,
@@ -29,14 +32,14 @@ const Canvas = () => {
     const state = useCanvasState({ takeSnapshot });
 
     const {
-        nodes,
+        // nodes,
         setNodes,
         setSelectedNodes,
-        applyNodeChanges,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        edges,
+        // applyNodeChanges,
+        // edges,
         setEdges,
         setSelectedEdges,
+        applyNodeChanges,
         applyEdgeChanges,
         onConnect,
         snapToGrid,
@@ -57,35 +60,40 @@ const Canvas = () => {
 
     const { zoomTo } = useReactFlow();
 
-    const customApplyNodeChanges = useCallback((changes: NodeChange[], nodes: Node[]): Node[] => {
-        // reset the helper lines (clear existing lines, if any)
-        setHelperLineHorizontal(undefined);
-        setHelperLineVertical(undefined);
+    // experimental feature: helper lines
+    // const customApplyNodeChanges = useCallback((changes: NodeChange[], nodes: Node[]): Node[] => {
+    //     // reset the helper lines (clear existing lines, if any)
+    //     setHelperLineHorizontal(undefined);
+    //     setHelperLineVertical(undefined);
 
-        // this will be true if it's a single node being dragged
-        // inside we calculate the helper lines and snap position for the position where the node is being moved to
-        if (changes.length === 1 && changes[0].type === 'position' && changes[0].dragging && changes[0].position) {
-            const helperLines = getHelperLines(changes[0], nodes);
+    //     // this will be true if it's a single node being dragged
+    //     // inside we calculate the helper lines and snap position for the position where the node is being moved to
+    //     if (
+    //         changes.length === 1 &&
+    //         changes[0].type === 'position' &&
+    //         changes[0].dragging && changes[0].position
+    //     ) {
+    //         const helperLines = getHelperLines(changes[0], nodes);
 
-            // if we have a helper line, we snap the node to the helper line position
-            // this is being done by manipulating the node position inside the change object
-            changes[0].position.x = helperLines.snapPosition.x ?? changes[0].position.x;
-            changes[0].position.y = helperLines.snapPosition.y ?? changes[0].position.y;
+    //         // if we have a helper line, we snap the node to the helper line position
+    //         // this is being done by manipulating the node position inside the change object
+    //         changes[0].position.x = helperLines.snapPosition.x ?? changes[0].position.x;
+    //         changes[0].position.y = helperLines.snapPosition.y ?? changes[0].position.y;
 
-            // if helper lines are returned, we set them so that they can be displayed
-            setHelperLineHorizontal(helperLines.horizontal);
-            setHelperLineVertical(helperLines.vertical);
-        }
+    //         // if helper lines are returned, we set them so that they can be displayed
+    //         setHelperLineHorizontal(helperLines.horizontal);
+    //         setHelperLineVertical(helperLines.vertical);
+    //     }
 
-        return applyNodeChanges(changes);
-    }, [applyNodeChanges]);
+    //     return applyNodeChanges(changes);
+    // }, [applyNodeChanges]);
 
-    const onNodesChange: OnNodesChange = useCallback(
-        (changes) => {
-            setNodes(customApplyNodeChanges(changes, nodes));
-        },
-        [nodes, setNodes, customApplyNodeChanges]
-    );
+    // const onNodesChange: OnNodesChange = useCallback(
+    //     (changes) => {
+    //         setNodes(customApplyNodeChanges(changes, nodes));
+    //     },
+    //     [nodes, setNodes, customApplyNodeChanges]
+    // );
 
     useOnSelectionChange({
         onChange: ({ nodes, edges }) => {
@@ -111,7 +119,7 @@ const Canvas = () => {
                     edges={state.edges}
                     nodeTypes={nodeTypes}
                     edgeTypes={edgeTypes}
-                    onNodesChange={onNodesChange}
+                    onNodesChange={applyNodeChanges}
                     onEdgesChange={applyEdgeChanges}
                     onConnect={onConnect}
                     snapGrid={[snapGridInterval, snapGridInterval]}
