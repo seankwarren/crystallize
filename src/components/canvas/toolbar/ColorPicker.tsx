@@ -1,6 +1,4 @@
-import Icon from '@components/generic/Icon';
 import { useCallback, useEffect, useRef } from 'react';
-import { Node } from 'reactflow';
 import { CanvasState } from '../hooks/useCanvasState';
 import { EdgeData, NodeData } from '../types';
 import './styles/ColorPicker.css';
@@ -24,22 +22,16 @@ const ColorPicker = ({ state, open = false }: Props) => {
 
     const colorPickerRef = useRef<HTMLDivElement>(null);
 
-    const handleClickOutside = useCallback((event: MouseEvent) => {
-        event.stopPropagation();
-        if (colorPickerRef.current && !colorPickerRef.current.contains(event.target as Node)) {
-            state.setColorSelectorOpen(false);
-            console.log('click outside');
-        }
+    const handleDocumentClick: EventListener = useCallback((e) => {
+        state.setColorSelectorOpen(false);
     }, [state]);
 
     useEffect(() => {
-        if (open) {
-            window.addEventListener('mousedown', handleClickOutside);
-        }
+        document.addEventListener('click', handleDocumentClick);
         return () => {
-            window.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('click', handleDocumentClick);
         };
-    }, [open, handleClickOutside]);
+    }, []);
 
     const onHover = (event: React.MouseEvent<HTMLDivElement>, color: string) => {
         const boxShadow = color ? getBoxShadow(color) : getBoxShadow(event.currentTarget.style.backgroundColor);
@@ -85,7 +77,7 @@ const ColorPicker = ({ state, open = false }: Props) => {
                     </div>
                 )
             })}
-            <Icon name="Pipette" />
+            {/* <Icon name="Pipette" /> */}
         </div >
     ) : null;
 }

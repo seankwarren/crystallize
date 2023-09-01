@@ -184,6 +184,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasState => {
                 sourceHandle: sourceHandle,
                 targetHandle: targetHandle,
                 type: 'base',
+                data: { color: '' },
             };
         }
 

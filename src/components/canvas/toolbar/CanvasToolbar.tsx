@@ -59,14 +59,11 @@ const CanvasToolbar = ({ state }: Props) => {
                         key={key}
                         icon={action.icon}
                         onClick={(e) => {
-                            // e.preventDefault();
+                            e.stopPropagation();
                             action.onClick(state);
                         }} />
                 )
             })}
-            {/* <Icon name="Pipette" onClick={(e) => { e.preventDefault(); state.setColorSelectorOpen(true) }} /> */}
-
-            {/* <ColorWheelIcon size={50} /> */}
         </div>
     );
     // }

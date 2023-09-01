@@ -22,7 +22,7 @@
     width: 100%;
     margin: calc(-1 * var(--md-spacing));
     padding: var(--md-spacing);
-    opacity: 0;
+    opacity: 0.3;
     filter: brightness(15%);
     border-radius: calc(var(--md-border-radius));
     z-index: 0;

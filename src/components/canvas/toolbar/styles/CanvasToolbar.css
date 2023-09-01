@@ -19,7 +19,7 @@
     translate: -50% -50%;
 }
 
-.canvas-toolbar > * {
+.canvas-toolbar > .nav-icon-container {
     padding: var(--sm-spacing);
     border-radius: 0;
 }

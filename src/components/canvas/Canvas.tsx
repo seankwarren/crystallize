@@ -129,6 +129,8 @@ const Canvas = () => {
                     onDrop={onDrop}
                     onDragOver={onDragOver}
                     connectionMode={ConnectionMode.Loose}
+                    selectionKeyCode="Meta"
+                    multiSelectionKeyCode="Shift"
                     fitView
                     className="canvas">
                     <Background
