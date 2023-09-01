@@ -17,4 +17,11 @@ const initialNodes: Node[] = [
     },
 ];
 
+export const draggingCardNode: Node = {
+    id: 'dragging-card',
+    type: 'card',
+    data: { label: 'Node 1', color: 'rgb(168, 130, 255)' },
+    position: { x: 0, y: 0 },
+};
+
 export default initialNodes;

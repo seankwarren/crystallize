@@ -7,6 +7,7 @@ import {
     ReactFlowInstance,
     SelectionDragHandler,
 } from 'reactflow';
+import { draggingCardNode } from '../nodes/initialNodes';
 import { defaultNodeHeight, defaultNodeWidth } from '../styles/styles';
 import { CanvasState } from './useCanvasState';
 
@@ -39,10 +40,42 @@ const useDragAndDrop = ({ state, takeSnapshot }: Props) => {
         takeSnapshot(state);
     }, [takeSnapshot, state]);
 
-    const onDragOver: DragEventHandler<HTMLDivElement> = (event) => {
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'move';
-    };
+    const onDragOver: DragEventHandler<HTMLDivElement> = useCallback(
+        (event) => {
+            event.preventDefault();
+
+            if (canvasWrapper.current && canvasInstance) {
+                const reactFlowBounds =
+                    canvasWrapper.current.getBoundingClientRect();
+
+                const position = canvasInstance.project({
+                    x:
+                        event.clientX -
+                        reactFlowBounds.left -
+                        defaultNodeWidth / 2,
+                    y:
+                        event.clientY -
+                        reactFlowBounds.top -
+                        defaultNodeHeight / 2,
+                });
+
+                const draggedNode = {
+                    ...draggingCardNode,
+                    position,
+                };
+                console.log(draggedNode);
+                // state.deleteElements(
+                //     [
+                //         state.nodes.find((n) => n.id === 'dragging-card'),
+                //     ] as Node[],
+                //     []
+                // );
+                state.addNode(draggedNode);
+            }
+            event.dataTransfer.dropEffect = 'move';
+        },
+        [state]
+    );
 
     const onDrop: DragEventHandler = useCallback(
         (event) => {

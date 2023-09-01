@@ -85,6 +85,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasState => {
         return selectedNodes;
     };
     const addNode = (node: Node) => {
+        console.log('adding node');
         setCanvasState((prev) => {
             takeSnapshot(prev);
             return { ...prev, nodes: [...nodes, node] };
