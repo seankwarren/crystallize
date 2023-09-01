@@ -1,18 +1,27 @@
-import { EdgeTypes } from '@components/canvas/edges/edgeTypes';
 import { NodeTypes } from '@components/canvas/nodes/nodeTypes';
 import { IconName } from '@components/generic/Icon';
 import type { FitViewOptions, PanelPosition } from '@reactflow/core';
 import type { ButtonHTMLAttributes, HTMLAttributes } from 'react';
-import { Edge, Node } from 'reactflow';
+import { EdgeTypes } from './edges';
+import { CanvasState } from './hooks/useCanvasState';
 
-export type ActionType<T extends Node | Edge> = {
+type ActionFunction =
+    | ((state: CanvasState) => void);
+
+export type ActionType = {
+    title: string;
     icon: IconName;
-    onClick: (element: T) => void;
-    allowedTypes: (NodeTypes | EdgeTypes)[];
+    onClick: ActionFunction
+    allowedNodeTypes: NodeTypes[];
+    allowedEdgeTypes: EdgeTypes[];
+    allowsMixedElements: boolean;
+    allowsMultiSelection: boolean;
+    requiresMultiSelection: boolean;
+    requiresSingleType: boolean;
 };
 
-export type ActionsListType<T extends Node | Edge> = {
-    [key: string]: ActionType<T>;
+export type ActionsListType = {
+    [key: string]: ActionType;
 };
 
 export type ControlProps = HTMLAttributes<HTMLDivElement> & {
@@ -22,3 +31,5 @@ export type ControlProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 export type ControlButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+
+export type Transform = [number, number, number];

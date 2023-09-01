@@ -16,21 +16,23 @@ export const useModalStore = create<ModalState>()((set) => ({
     modalOpen: false,
     handleOpenModal: () => {
         set({ modalOpen: true });
-        console.log('handleOpenModal');
+        import.meta.env.MODE === 'production' && console.log('handleOpenModal');
     },
     handleCloseModal: () => {
         set({ modalOpen: false });
-        console.log('handleCloseModal');
+        import.meta.env.MODE === 'production' &&
+            console.log('handleCloseModal');
     },
     modalTitle: 'Title',
     setModalTitle: (title) => {
         set({ modalTitle: title });
-        console.log('setModalTitle');
+        import.meta.env.MODE === 'production' && console.log('setModalTitle');
     },
     modalContents: undefined,
     setModalContents: (contents) => {
         set({ modalContents: contents });
-        console.log('setModalContents');
+        import.meta.env.MODE === 'production' &&
+            console.log('setModalContents');
     },
     showModalClose: true,
     setShowModalClose: (isShown) => {

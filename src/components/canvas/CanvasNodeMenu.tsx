@@ -30,7 +30,7 @@ const CanvasNodeMenu = () => {
                 className="canvas-node-drag-item"
                 onDragStart={(event: DragEvent) => { onDragStart(event, 'image'); }}
                 draggable>
-                <Icon name="Image" size={nodeDragIconSize} />
+                <Icon name="FileImage" size={nodeDragIconSize} />
             </div>
         </div>
     )

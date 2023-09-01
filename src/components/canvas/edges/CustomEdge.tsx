@@ -13,7 +13,7 @@ const CustomEdge = ({
     markerEnd,
 }: Props) => {
 
-    const [edgePath] = getBezierPath({
+    const [edgePath, labelX, labelY] = getBezierPath({
         sourceX,
         sourceY,
         sourcePosition,
@@ -23,7 +23,12 @@ const CustomEdge = ({
     });
 
     return (
-        <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+        <BaseEdge
+            labelX={labelX}
+            labelY={labelY}
+            path={edgePath}
+            markerEnd={markerEnd}
+            style={style} />
     )
 }
 

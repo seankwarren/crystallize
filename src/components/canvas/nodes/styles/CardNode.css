@@ -14,15 +14,6 @@
     box-shadow: 0px 0px 0px calc(var(--xl-border-width) * 2) var(--accent);
 }
 
-/* .card-node.selected::before {
-    content: '';
+.node-toolbar-item {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-width: calc(var(--xl-border-width) * 2);
-    border-color: var(--accent);
-    box-sizing:
-    /* background-color: var(--accent); */
-} */
+}

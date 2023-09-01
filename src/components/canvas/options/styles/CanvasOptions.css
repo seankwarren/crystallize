@@ -4,7 +4,7 @@
     border: var(--sm-border-width) solid var(--md-border-color);
     border-radius: var(--sm-border-radius);
     padding: calc(var(--sm-spacing) - 2px);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--md-box-shadow);
     background-color: var(--main-bg-color);
     display: flex;
     flex-direction: column;

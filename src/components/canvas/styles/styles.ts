@@ -6,3 +6,6 @@ export const snapGridInterval = 20;
 export const canvasMenuWidth = 170;
 export const defaultNodeWidth = 180; // update App.css
 export const defaultNodeHeight = 60; // update App.css
+export const ZOOM_DURATION = 200;
+export const minZoom = 0.2;
+export const maxZoom = 2;

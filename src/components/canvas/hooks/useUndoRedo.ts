@@ -28,10 +28,13 @@ export const useUndoRedo: UseUndoRedo = ({
 
     const takeSnapshot = useCallback(
         (state: CanvasState) => {
-            console.log(state.nodes[0].position);
+            console.log('SNAP');
             setPast((past) => [
                 ...past.slice(past.length - maxHistorySize + 1, past.length),
-                { nodes: state.nodes, edges: state.edges },
+                {
+                    nodes: state.nodes,
+                    edges: state.edges,
+                },
             ]);
 
             setFuture([]);
@@ -41,14 +44,16 @@ export const useUndoRedo: UseUndoRedo = ({
 
     const undo = useCallback(
         (state: CanvasState) => {
-            console.log(past[past.length - 1]);
             const pastState = past[past.length - 1];
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (pastState) {
                 setPast((past) => past.slice(0, past.length - 1));
                 setFuture((future) => [
                     ...future,
-                    { nodes: state.nodes, edges: state.edges },
+                    {
+                        nodes: state.nodes,
+                        edges: state.edges,
+                    },
                 ]);
                 state.setNodes(pastState.nodes);
                 state.setEdges(pastState.edges);
@@ -65,7 +70,10 @@ export const useUndoRedo: UseUndoRedo = ({
                 setFuture((future) => future.slice(0, future.length - 1));
                 setPast((past) => [
                     ...past,
-                    { nodes: state.nodes, edges: state.edges },
+                    {
+                        nodes: state.nodes,
+                        edges: state.edges,
+                    },
                 ]);
                 state.setNodes(futureState.nodes);
                 state.setEdges(futureState.edges);

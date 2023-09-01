@@ -49,8 +49,6 @@ const useDragAndDrop = ({ state, takeSnapshot }: Props) => {
             event.preventDefault();
 
             if (canvasWrapper.current && canvasInstance) {
-                takeSnapshot(state);
-
                 const reactFlowBounds =
                     canvasWrapper.current.getBoundingClientRect();
                 const type = event.dataTransfer.getData(

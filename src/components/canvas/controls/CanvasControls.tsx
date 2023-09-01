@@ -3,10 +3,10 @@ import { MouseEventHandler, useEffect, useState } from 'react';
 
 import Icon from '@components/generic/Icon';
 import { PanelPosition } from 'reactflow';
-import { CanvasOptions, ControlButton } from '.';
-import { CanvasState } from './hooks/useCanvasState';
+import { CanvasOptions, ControlButton } from '..';
+import { CanvasState } from '../hooks/useCanvasState';
+import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from '../styles/styles';
 import './styles/CanvasControls.css';
-import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from './styles/styles';
 
 type Props = {
     className?: string

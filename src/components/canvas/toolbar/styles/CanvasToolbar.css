@@ -1,0 +1,37 @@
+.canvas-toolbar {
+    position: relative;
+    display: flex;
+    width: min-content;
+    background-color: var(--main-bg-color);
+    box-shadow: var(--lg-box-shadow);
+    padding: 1px;
+    align-items: center;
+    justify-content: center;
+    border-radius: calc(var(--md-border-radius) + 1px);
+    z-index: 10;
+}
+
+.node {
+    translate: -50% -140%;
+}
+
+.edge {
+    translate: -50% -50%;
+}
+
+.canvas-toolbar > * {
+    padding: var(--sm-spacing);
+    border-radius: 0;
+}
+
+.canvas-toolbar > *:last-child {
+    border-radius: 0 var(--md-border-radius) var(--md-border-radius) 0;
+}
+
+.canvas-toolbar > *:first-child {
+    border-radius: var(--md-border-radius) 0 0 var(--md-border-radius);
+}
+
+.canvas-toolbar > *:hover {
+    background-color: var(--main-bg-color-hover);
+}

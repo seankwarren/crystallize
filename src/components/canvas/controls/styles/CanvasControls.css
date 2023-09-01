@@ -10,7 +10,7 @@
     padding: 1px;
     margin: var(--sm-spacing) 0px;
     border-radius: var(--sm-border-radius);
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+    box-shadow: var(--lg-box-shadow);
 }
 
 .canvas-controls-section:first-of-type {

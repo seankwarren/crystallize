@@ -9,10 +9,12 @@ export const useNavigationStore = create<NavigationState>((set) => ({
     headerMenuExpanded: false,
     handleExpandMenu: () => {
         set({ headerMenuExpanded: true });
-        console.log('handleExpandMenu');
+        import.meta.env.MODE === 'production' &&
+            console.log('handleExpandMenu');
     },
     handleCollapseMenu: () => {
         set({ headerMenuExpanded: false });
-        console.log('handleCollapseMenu');
+        import.meta.env.MODE === 'production' &&
+            console.log('handleCollapseMenu');
     },
 }));
