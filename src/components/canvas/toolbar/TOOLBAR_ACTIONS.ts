@@ -7,12 +7,12 @@ import { ActionsListType } from '../types';
 
 const removeElements = (state: CanvasState) => {
     state.deleteElements(state.selectedNodes, state.selectedEdges);
-    console.log(state);
     devLog('removing elements');
 };
 
-const openPalette = (_state: CanvasState) => {
-    devLog('opening palette');
+const openPalette = (state: CanvasState) => {
+    state.setColorSelectorOpen(true);
+    devLog(`opening palette ${state.colorSelectorOpen}`);
 };
 const zoomToSelection = (state: CanvasState) => {
     if (state.selectedNodes.length > 0) {
@@ -34,9 +34,6 @@ const zoomToSelection = (state: CanvasState) => {
             }
             return acc;
         }, []);
-
-        // state.selectedEdges;
-        console.log(nodes);
         state.fitViewToSelection(nodes);
     }
     devLog('zooming to selection');

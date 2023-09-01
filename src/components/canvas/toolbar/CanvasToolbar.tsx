@@ -3,6 +3,7 @@ import { ReactFlowState, XYPosition, getRectOfNodes, useStore } from 'reactflow'
 import { CanvasState } from '../hooks/useCanvasState';
 import { getAllowedToolbarActions } from '../toolbar';
 import { ActionsListType } from '../types';
+import ColorPicker from './ColorPicker';
 import './styles/CanvasToolbar.css';
 
 type Props = {
@@ -48,16 +49,24 @@ const CanvasToolbar = ({ state }: Props) => {
         left: position.x,
     }
 
+
     return (
         <div className={`canvas-toolbar ${className}`} style={positionStyle}>
+            <ColorPicker state={state} open={state.colorSelectorOpen} />
             {Object.entries(actions).map(([key, action]) => {
                 return (
                     <NavigationIcon
                         key={key}
                         icon={action.icon}
-                        onClick={() => { action.onClick(state); }} />
+                        onClick={(e) => {
+                            // e.preventDefault();
+                            action.onClick(state);
+                        }} />
                 )
             })}
+            {/* <Icon name="Pipette" onClick={(e) => { e.preventDefault(); state.setColorSelectorOpen(true) }} /> */}
+
+            {/* <ColorWheelIcon size={50} /> */}
         </div>
     );
     // }

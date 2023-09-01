@@ -1,4 +1,5 @@
 import { icons } from 'lucide-react';
+import { MouseEvent } from 'react';
 import { defaultIconColor, defaultIconSize, defaultIconStrokeWidth } from './styles/styles';
 
 export type IconName = (keyof typeof icons) | 'Blank';
@@ -9,6 +10,8 @@ type Props = {
     size?: number;
     strokeWidth?: number;
     className?: string
+    onClick?: (e: MouseEvent) => unknown;
+
 }
 
 const Icon = ({
@@ -16,7 +19,8 @@ const Icon = ({
     color = defaultIconColor,
     size = defaultIconSize,
     strokeWidth = defaultIconStrokeWidth,
-    className
+    className,
+    onClick = () => { }
 }: Props) => {
 
     if (name === 'Blank') {
@@ -30,7 +34,8 @@ const Icon = ({
             color={color}
             size={size}
             strokeWidth={strokeWidth}
-            className={className} />
+            className={className}
+            onClick={onClick} />
     )
 };
 

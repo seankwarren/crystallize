@@ -55,3 +55,11 @@ export type ControlProps = HTMLAttributes<HTMLDivElement> & {
 export type ControlButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 export type Transform = [number, number, number];
+
+export interface NodeData {
+    color: string;
+}
+
+export interface EdgeData {
+    color: string;
+}

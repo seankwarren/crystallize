@@ -12,6 +12,7 @@ import {
     useReactFlow,
 } from 'reactflow';
 import { ZOOM_DURATION } from '../styles/styles';
+import { EdgeData, NodeData } from '../types';
 
 export type CanvasState = {
     nodes: Node[];
@@ -21,7 +22,6 @@ export type CanvasState = {
     snapToGrid: boolean;
     snapToObjects: boolean;
     isInteractive: boolean;
-    zoom: number;
     setNodes: (nodes: Node[]) => Node[];
     setSelectedNodes: (selectedNodes: Node[]) => Node[];
     addNode: (node: Node) => Node[];
@@ -39,6 +39,13 @@ export type CanvasState = {
     toggleSnapToGrid: () => void;
     toggleSnapToObjects: () => void;
     toggleIsInteractive: () => void;
+    colorSelectorOpen: boolean;
+    setColorSelectorOpen: (open: boolean) => void;
+    setColors: (
+        color: string,
+        selectedNodes: Node[],
+        selectedEdges: Edge[]
+    ) => void;
 };
 
 type Props = {
@@ -55,6 +62,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasState => {
         snapToGrid: true,
         snapToObjects: false,
         isInteractive: true,
+        colorSelectorOpen: false,
     };
 
     const { fitView } = useReactFlow();
@@ -183,6 +191,51 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasState => {
         setEdges(updatedEdges);
     };
 
+    const colorSelectorOpen = canvasState.colorSelectorOpen;
+
+    const setColorSelectorOpen = (open: boolean) => {
+        setCanvasState((prev) => ({ ...prev, colorSelectorOpen: open }));
+    };
+
+    const setColors = (
+        color: string,
+        selectedNodes: Node[],
+        selectedEdges: Edge[]
+    ): void => {
+        if (selectedNodes.length === 0 && selectedEdges.length === 0) return;
+
+        takeSnapshot(canvasState);
+
+        // Generate a Set of selected node IDs for quicker lookup
+        const selectedNodeIds = new Set(selectedNodes.map((n) => n.id));
+        const selectedEdgeIds = new Set(selectedEdges.map((e) => e.id));
+
+        const updatedNodes = canvasState.nodes.map((node: Node) => {
+            if (selectedNodeIds.has(node.id)) {
+                const newData: NodeData = {
+                    ...(node.data as NodeData),
+                    color: color,
+                };
+                return { ...node, ...{ data: newData } };
+            }
+            return node; // return the node as-is if not selected
+        });
+
+        const updatedEdges = canvasState.edges.map((edge: Edge) => {
+            if (selectedEdgeIds.has(edge.id)) {
+                const newData: EdgeData = {
+                    ...(edge.data as EdgeData),
+                    color: color,
+                };
+                return { ...edge, ...{ data: newData } };
+            }
+            return edge; // return the edge as-is if not selected
+        });
+
+        setNodes(updatedNodes);
+        setEdges(updatedEdges);
+    };
+
     return {
         nodes,
         selectedNodes,
@@ -205,6 +258,9 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasState => {
         isInteractive,
         toggleIsInteractive,
         fitViewToSelection,
+        setColors,
+        colorSelectorOpen,
+        setColorSelectorOpen,
     };
 };
 

@@ -28,7 +28,6 @@ export const useUndoRedo: UseUndoRedo = ({
 
     const takeSnapshot = useCallback(
         (state: CanvasState) => {
-            console.log('SNAP');
             setPast((past) => [
                 ...past.slice(past.length - maxHistorySize + 1, past.length),
                 {

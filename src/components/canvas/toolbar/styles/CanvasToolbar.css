@@ -24,14 +24,14 @@
     border-radius: 0;
 }
 
-.canvas-toolbar > *:last-child {
+.canvas-toolbar button:last-of-type {
     border-radius: 0 var(--md-border-radius) var(--md-border-radius) 0;
 }
 
-.canvas-toolbar > *:first-child {
+.canvas-toolbar button:first-of-type {
     border-radius: var(--md-border-radius) 0 0 var(--md-border-radius);
 }
 
-.canvas-toolbar > *:hover {
+.canvas-toolbar > .nav-icon-container:hover {
     background-color: var(--main-bg-color-hover);
 }

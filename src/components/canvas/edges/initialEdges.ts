@@ -6,6 +6,9 @@ const initialEdges: Edge[] = [
         type: 'base',
         source: '1',
         target: '2',
+        data: {
+            color: '',
+        },
     },
 ];
 
