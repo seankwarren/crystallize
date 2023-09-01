@@ -1,11 +1,11 @@
 import { Panel, useReactFlow } from '@reactflow/core';
 import { MouseEventHandler, useEffect, useState } from 'react';
 
+import { CanvasState } from '@components/canvas/hooks/useCanvasState';
+import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from '@components/canvas/styles/styles';
 import Icon from '@components/generic/Icon';
 import { PanelPosition } from 'reactflow';
 import { CanvasOptions, ControlButton } from '..';
-import { CanvasState } from '../hooks/useCanvasState';
-import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from '../styles/styles';
 import './styles/CanvasControls.css';
 
 type Props = {

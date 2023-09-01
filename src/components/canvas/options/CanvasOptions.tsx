@@ -1,7 +1,7 @@
+import { CanvasState } from '@components/canvas/hooks/useCanvasState';
+import { menuIconSize } from '@components/canvas/styles/styles';
 import Icon, { IconName } from '@components/generic/Icon';
 import { CSSProperties } from 'react';
-import { CanvasState } from '../hooks/useCanvasState';
-import { menuIconSize } from '../styles/styles';
 import './styles/CanvasOptions.css';
 type Props = {
     closeMenu: () => void;
