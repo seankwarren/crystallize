@@ -7,7 +7,6 @@ import {
     OnEdgesDelete,
     OnNodesDelete,
     SelectionDragHandler,
-    useStoreApi,
 } from 'reactflow';
 import ShortUniqueId from 'short-unique-id';
 import { draggingCardNode } from '../nodes';
@@ -22,7 +21,6 @@ type Props = {
 const uid = new ShortUniqueId({ length: 10 });
 
 const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
-    const rfStore = useStoreApi();
     const onNodeDragStart: NodeDragHandler = useCallback(() => {
         takeSnapshot({
             nodes: store.nodes,

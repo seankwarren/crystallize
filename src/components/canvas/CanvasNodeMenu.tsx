@@ -5,6 +5,7 @@ import { CanvasStore } from './hooks/useCanvasState';
 import { draggingCardNode } from './nodes';
 import './styles/CanvasNodeMenu.css';
 import { defaultNodeHeight, defaultNodeWidth, nodeDragIconSize } from './styles/styles';
+import { NodeData } from './types';
 
 type Props = {
     store: CanvasStore;
@@ -40,7 +41,7 @@ const CanvasNodeMenu = ({ store }: Props) => {
             data: {
                 ...draggingCardNode.data,
                 draggedType: nodeType,
-            }
+            } as NodeData
         };
 
         store.addNode(draggedNode);
