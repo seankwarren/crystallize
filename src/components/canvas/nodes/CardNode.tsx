@@ -17,7 +17,7 @@ const handleStyle = {
 
 const CardNode = ({ id, selected, data }: Props) => {
 
-    const { color } = data;
+    const { color, isResizable = false } = data;
 
     const boxShadow = useCallback((color: ColorType | undefined): string => {
         if (!color && !selected) {
@@ -36,7 +36,7 @@ const CardNode = ({ id, selected, data }: Props) => {
     }, [selected])
 
     return (
-        <div className={`card-node ${selected && 'selected'} nowheel`} style={{ boxShadow: boxShadow(color) }}>
+        <div id={id} className={`card-node ${selected && 'selected'} nowheel`} style={{ boxShadow: boxShadow(color) }}>
 
             <div className={`card-node-backdrop ${selected && 'selected'}`} style={{ backgroundColor: color }}></div>
 
@@ -44,6 +44,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             <NodeResizeControl
                 position='top'
                 variant={ResizeControlVariant.Line}
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(calc(var(--md-spacing) / 2), -75%)',
@@ -56,6 +57,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             <NodeResizeControl
                 position='right'
                 variant={ResizeControlVariant.Line}
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-25%, calc(var(--md-spacing) / 2))',
@@ -68,6 +70,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             <NodeResizeControl
                 position='bottom'
                 variant={ResizeControlVariant.Line}
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(calc(var(--md-spacing) / 2), -25%)',
@@ -80,6 +83,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             <NodeResizeControl
                 position='left'
                 variant={ResizeControlVariant.Line}
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-75%, calc(var(--md-spacing) / 2))',
@@ -91,6 +95,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             </NodeResizeControl>
             <NodeResizeControl
                 position='top-left'
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
@@ -103,6 +108,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             </NodeResizeControl>
             <NodeResizeControl
                 position='top-right'
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
@@ -115,6 +121,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             </NodeResizeControl>
             <NodeResizeControl
                 position='bottom-right'
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
@@ -127,6 +134,7 @@ const CardNode = ({ id, selected, data }: Props) => {
             </NodeResizeControl>
             <NodeResizeControl
                 position='bottom-left'
+                shouldResize={() => isResizable}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',

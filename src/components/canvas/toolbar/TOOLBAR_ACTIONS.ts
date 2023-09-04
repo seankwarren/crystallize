@@ -1,38 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { devLog } from '@utils/.';
 // import { getRectOfNodes } from 'src/utils/utils';
-import { CanvasState } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/useCanvasState';
 import { ActionsListType } from '../types';
 
-const removeElements = (state: CanvasState) => {
-    state.deleteElements(state.getSelectedNodes(), state.getSelectedEdges());
+const removeElements = (store: CanvasStore) => {
+    store.deleteElements(store.getSelectedNodes(), store.getSelectedEdges());
     devLog('removing elements');
 };
 
-const openPalette = (state: CanvasState) => {
-    state.setColorSelectorOpen(true);
+const openPalette = (store: CanvasStore) => {
+    store.setColorSelectorOpen(true);
     devLog('opened palette');
 };
-const zoomToSelection = (state: CanvasState) => {
-    state.fitViewToSelection(state.getSelectedNodes());
+const zoomToSelection = (store: CanvasStore) => {
+    store.fitViewToSelection(store.getSelectedNodes());
     return;
 };
-const editLineDirection = (_state: CanvasState) => {
+const editLineDirection = (_store: CanvasStore) => {
     devLog('editing line direction');
 };
-const editNode = (_state: CanvasState) => {
+const editNode = (_store: CanvasStore) => {
     devLog('editing node');
 };
-const editLabel = (_state: CanvasState) => {
+const editLabel = (_store: CanvasStore) => {
     devLog('editing label');
 };
-const createGroup = (_state: CanvasState) => {
+const createGroup = (_store: CanvasStore) => {
     devLog('creating group');
 };
-const alignNodes = (_state: CanvasState) => {
+const alignNodes = (_store: CanvasStore) => {
     devLog('aligning children');
 };
-const setBackground = (_state: CanvasState) => {
+const setBackground = (_store: CanvasStore) => {
     devLog('setting background');
 };
 

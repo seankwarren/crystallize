@@ -1,0 +1,18 @@
+.intro-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--intro-node-color);
+    color: var(--accent);
+    /* opacity: 0.2; */
+    border-radius: var(--lg-border-radius);
+    width: var(--intro-node-width);
+    height: var(--intro-node-height);
+}
+
+.intro-node > p {
+    margin: calc(var(--sm-spacing) / 2) 0px;
+    /* opacity: 1; */
+    color: var(--accent);
+}

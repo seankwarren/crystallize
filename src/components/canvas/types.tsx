@@ -1,10 +1,10 @@
 import { IconName } from '../generic/Icon';
 import { EdgeTypes } from './edges';
-import { CanvasState } from './hooks/useCanvasState';
+import { CanvasStore } from './hooks/useCanvasState';
 import { NodeTypes } from './nodes/nodeTypes';
 
 type ActionFunction =
-    | ((state: CanvasState) => void);
+    | ((state: CanvasStore) => void);
 
 export type ActionType = {
     /** Tooltip text for the action. */
@@ -56,6 +56,8 @@ export type ColorType =
 export interface NodeData {
     color: ColorType;
     label?: string | JSX.Element;
+    isResizable: boolean;
+    draggedType: NodeTypes;
 }
 
 export interface EdgeData {

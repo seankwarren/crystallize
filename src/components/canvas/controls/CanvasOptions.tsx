@@ -1,5 +1,5 @@
 import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
-import { menuIconSize } from '@components/canvas/styles/styles';
+import { canvasOptionMenuIconSize } from '@components/canvas/styles/styles';
 import Icon, { IconName } from '@components/generic/Icon';
 import { CSSProperties } from 'react';
 import './styles/CanvasOptions.css';
@@ -11,7 +11,7 @@ type Props = {
 
 const OptionIcon = (name: IconName, className: string = '') => {
     return (
-        <Icon name={name} size={menuIconSize} color="var(--primary-font-color)" className={`menu-item-icon ${className}`} />
+        <Icon name={name} size={canvasOptionMenuIconSize} className={`menu-item-icon ${className}`} />
     )
 }
 const CanvasOptions = ({ closeMenu, style, store }: Props) => {

@@ -2,8 +2,8 @@
     display: flex;
     background-color: var(--dark-bg-color);
     border-radius: var(--md-border-radius);
-    min-width: var(--default-node-width);
-    min-height: var(--default-node-height);
+    min-width: var(--min-card-node-width);
+    min-height: var(--min-card-node-height);
     width: 100%;
     height: 100%;
     box-sizing: border-box;

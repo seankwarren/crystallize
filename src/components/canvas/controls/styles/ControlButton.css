@@ -16,3 +16,11 @@
 .controls-button:last-of-type {
     border-radius: 0 0 var(--sm-border-radius) var(--sm-border-radius);
 }
+
+.controls-button.disabled > svg {
+    stroke: var(--lt-border-color);
+}
+
+.controls-button > svg {
+    stroke: var(--primary-font-color);
+}

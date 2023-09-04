@@ -7,6 +7,7 @@ import {
     OnEdgesDelete,
     OnNodesDelete,
     SelectionDragHandler,
+    useStoreApi,
 } from 'reactflow';
 import ShortUniqueId from 'short-unique-id';
 import { draggingCardNode } from '../nodes';
@@ -21,6 +22,7 @@ type Props = {
 const uid = new ShortUniqueId({ length: 10 });
 
 const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
+    const rfStore = useStoreApi();
     const onNodeDragStart: NodeDragHandler = useCallback(() => {
         takeSnapshot({
             nodes: store.nodes,
@@ -75,11 +77,8 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
 
     const onDrop: DragEventHandler = useCallback(
         (event) => {
-            // event.preventDefault();
             if (!store.canvasRef.current) return;
-            console.log(event.dataTransfer);
             const type = event.dataTransfer.getData('application/reactflow');
-            // check if the dropped element is valid
             if (typeof type === 'undefined' || !type) {
                 return;
             }
@@ -119,18 +118,14 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
     // TODO: fix this
     const onDragEnd = useCallback(
         (event: DragEvent) => {
-            // event.preventDefault();
             if (!event.dataTransfer || !store.canvasRef.current) return;
             if (event.dataTransfer.dropEffect !== 'none') return;
-            console.log('drag ended outside of canvas');
-            console.log(event.dataTransfer);
-            const type = event.dataTransfer.getData('application/reactflow');
 
-            console.log(type);
-            // check if the dropped element is valid
+            const type = event.dataTransfer.getData('application/reactflow');
             if (typeof type === 'undefined' || !type) {
                 return;
             }
+
             const reactFlowBounds =
                 store.canvasRef.current.getBoundingClientRect();
             devLog(`type dropped: ${type}`);
@@ -141,6 +136,7 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
                 console.warn("couldn't find dragged node");
                 return;
             }
+
             const position = store.project({
                 x: event.clientX - reactFlowBounds.left,
                 y: event.clientY - reactFlowBounds.top,

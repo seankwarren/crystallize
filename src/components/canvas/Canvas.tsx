@@ -49,7 +49,9 @@ const Canvas = () => {
         onConnect,
         snapToGrid,
         isInteractive,
-        zoomTo
+        zoomTo,
+        fitView,
+        setCenter,
     } = store;
 
 
@@ -74,7 +76,6 @@ const Canvas = () => {
     const onInit = (() => {
         setNodes([introNode]);
         setEdges([]);
-        zoomTo(.1);
     })
 
     useEffect(() => {
@@ -82,7 +83,7 @@ const Canvas = () => {
         return () => {
             document.removeEventListener('dragend', onDragEnd);
         };
-    }, []);
+    }, [onDragEnd]);
 
     return (
         <div className="canvas-container" ref={canvasRef}>
@@ -113,13 +114,13 @@ const Canvas = () => {
                     // onDragEnd={onDragEnd}
                     minZoom={0.1}
                     maxZoom={2}
-                    // nodeOrigin={[0.5, 0.5]}
                     connectionMode={ConnectionMode.Loose}
                     selectionKeyCode="Meta"
                     multiSelectionKeyCode="Shift"
                     panOnDrag={true}
                     selectionMode={SelectionMode.Partial}
                     fitView
+                    fitViewOptions={{ minZoom: 1, maxZoom: 1 }}
                     className="canvas">
                     <Background
                         className="canvas-background"

@@ -1,9 +1,8 @@
+import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
+import { canvasMenuWidth, controlIconSize } from '@components/canvas/styles/styles';
+import Icon from '@components/generic/Icon';
 import { Panel } from '@reactflow/core';
 import { MouseEventHandler, useEffect, useState } from 'react';
-
-import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
-import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from '@components/canvas/styles/styles';
-import Icon from '@components/generic/Icon';
 import { PanelPosition } from 'reactflow';
 import CanvasOptions from './CanvasOptions';
 import ControlButton from './ControlButton';
@@ -143,17 +142,17 @@ const CanvasControls = ({
                 {isInteractive && <div className="canvas-controls-section">
                     <ControlButton
                         onClick={() => { if (canUndo) onUndoHandler(); }}
-                        className={`canvas-controls-undo ${canUndo ? 'disabled' : ''}`}
+                        className={`canvas-controls-undo ${canUndo ? '' : 'disabled'}`}
                         title="undo"
                         aria-label="undo">
-                        <Icon name="Undo2" size={controlIconSize} color={canUndo ? undefined : disabledMenuIconColor} />
+                        <Icon name="Undo2" size={controlIconSize} />
                     </ControlButton>
                     <ControlButton
                         onClick={() => { if (canRedo) onRedoHandler(); }}
-                        className={`canvas-controls-redo ${canRedo ? 'disabled' : ''}`}
+                        className={`canvas-controls-redo ${canRedo ? '' : 'disabled'}`}
                         title="redo"
                         aria-label="redo">
-                        <Icon name="Redo2" size={controlIconSize} color={canRedo ? undefined : disabledMenuIconColor} />
+                        <Icon name="Redo2" size={controlIconSize} />
                     </ControlButton>
                 </div>}
                 <div className="canvas-controls-section">

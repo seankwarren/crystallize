@@ -1,0 +1,6 @@
+.dragging-node {
+    background-color: var(--intro-node-color);
+    border-radius: var(--md-border-radius);
+    box-sizing: border-box;
+    box-shadow: 0px 0px 0px calc(var(--xl-border-width) * 2) var(--accent);
+}

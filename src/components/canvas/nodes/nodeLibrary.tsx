@@ -1,26 +1,9 @@
 import { Node } from 'reactflow';
 
-export const initialNodes: Node[] = [
-    {
-        id: '1',
-        type: 'card',
-        data: { label: 'Node 1', color: '' },
-        position: { x: 0, y: 40 },
-        // draggable: true,
-    },
-    {
-        id: '2',
-        type: 'card',
-        data: { label: 'Node 2', color: '' },
-        position: { x: 0, y: -40 },
-        // draggable: true,
-    },
-];
-
 export const draggingCardNode: Node = {
     id: 'dragging-card',
-    type: 'card',
-    data: { label: 'Node 1', color: 'rgb(168, 130, 255)' },
+    type: 'dragging',
+    data: {},
     dragging: true,
     selected: false,
     position: { x: 0, y: 0 },
@@ -28,22 +11,26 @@ export const draggingCardNode: Node = {
 
 export const introNode: Node = {
     id: 'intro',
-    type: 'card',
+    type: 'intro',
     data: {
         color: 'rgb(168, 130, 255)',
+        isResizable: false,
         label:
             <>
                 <p>
-                    This is a bunch of information
+                    Drag from below or double click
                 </p>
                 <p>
-                    about how to pan and zoom and drag
+                    Space + Drag to pan
                 </p>
                 <p>
-                    nodes onto the screen
+                    Ctrl + Scroll to zoom
                 </p>
             </>
     },
     selected: true,
+    draggable: false,
+    selectable: false,
+    connectable: false,
     position: { x: 0, y: 0 },
 };

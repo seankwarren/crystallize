@@ -18,6 +18,7 @@ const CanvasNodeMenu = ({ store }: Props) => {
         store.setSelectedNodes([]); // TODO: this is not working
         event.dataTransfer.setDragImage(new Image(), 0, 0);
         event.dataTransfer.setData('application/reactflow', nodeType);
+        console.log(nodeType)
 
         if (!store.canvasRef.current) return;
         const reactFlowBounds = store.canvasRef.current.getBoundingClientRect();
@@ -36,6 +37,10 @@ const CanvasNodeMenu = ({ store }: Props) => {
         const draggedNode: Node = {
             ...draggingCardNode,
             position,
+            data: {
+                ...draggingCardNode.data,
+                draggedType: nodeType,
+            }
         };
 
         store.addNode(draggedNode);

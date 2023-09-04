@@ -7,7 +7,7 @@ body {
     --light-bg-color: rgb(54, 54, 54);
     --light-bg-color-hover: rgb(64, 64, 64);
     --red: rgb(251, 70, 76);
-    --accent: rgb(125, 91, 237);
+    --accent: rgb(168, 130, 255);
 
     /* fonts */
     --sm-font-size: 13px;
@@ -20,8 +20,22 @@ body {
     --modal-max-height: 400px;
     --modal-min-width: 300px;
     --modal-min-height: 200px;
+
     --default-node-width: 360px; /* update .ts file */
     --default-node-height: 120px; /* update .ts file */
+    --min-card-node-width: 25px; /* update .ts file */
+    --min-card-node-height: 25px; /* update .ts file */
+    --intro-node-width: 260px;
+    --intro-node-height: 100px;
+    --intro-node-color: rgba(168, 130, 255, 0.2);
+
+    --default-card-node-width: 360px;
+    --default-card-node-height: 120px;
+    --default-note-node-width: 400px;
+    --default-note-node-height: 400px;
+    --default-image-node-width: 400px;
+    --default-image-node-height: 400px;
+
     --sm-spacing: 8px;
     --md-spacing: 14px;
     --lg-spacing: 20px;
@@ -49,7 +63,9 @@ body {
 
 body {
     margin: 0;
-    font-family: 'Courier New', Courier, monospace;
+    /* font-family: '' */
+    font-family: 'Open Sans', sans-serif;
+    font-weight: thin;
     color: var(--primary-font-color);
     background-color: var(--main-bg-color);
 }

@@ -269,6 +269,18 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
     );
     const toggleIsInteractive = () => {
         setIsInteractive((prev) => !prev);
+        setNodes((nodes) => {
+            const updatedNodes = nodes.map((node) => {
+                return {
+                    ...node,
+                    data: {
+                        ...node.data,
+                        isResizable: !node.data.isResizable,
+                    } as NodeData,
+                };
+            });
+            return updatedNodes;
+        });
     };
 
     // TODO: move to local state of toolbar

@@ -1,7 +1,7 @@
 import { ActionsListType } from '@components/canvas/types';
 import { Edge, Node } from 'reactflow';
 import { EdgeTypes } from '../edges';
-import { CanvasState } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/useCanvasState';
 import { NodeTypes } from '../nodes';
 import { TOOLBAR_ACTIONS } from './TOOLBAR_ACTIONS';
 
@@ -24,7 +24,7 @@ const someTypesMatch = (
 };
 
 export const getAllowedToolbarActions = (
-    state: CanvasState
+    state: CanvasStore
 ): ActionsListType => {
     const filteredActions = Object.entries(TOOLBAR_ACTIONS).filter(
         ([, action]) => {
