@@ -9,7 +9,9 @@ import {
 } from 'reactflow';
 
 export const devLog = (str: string = '') => {
-    import.meta.env.MODE === 'development' && console.log(str);
+    if (import.meta.env.MODE === 'development') {
+        console.trace(str);
+    }
 };
 
 export const getBoundsOfBoxes = (box1: Box, box2: Box): Box => ({

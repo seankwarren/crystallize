@@ -1,42 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { devLog } from '@utils/.';
 // import { getRectOfNodes } from 'src/utils/utils';
-import { Node } from 'reactflow';
 import { CanvasState } from '../hooks/useCanvasState';
 import { ActionsListType } from '../types';
 
 const removeElements = (state: CanvasState) => {
-    state.deleteElements(state.selectedNodes, state.selectedEdges);
+    state.deleteElements(state.getSelectedNodes(), state.getSelectedEdges());
     devLog('removing elements');
 };
 
 const openPalette = (state: CanvasState) => {
     state.setColorSelectorOpen(true);
-    devLog(`opening palette ${state.colorSelectorOpen}`);
+    devLog('opened palette');
 };
 const zoomToSelection = (state: CanvasState) => {
-    if (state.selectedNodes.length > 0) {
-        state.fitViewToSelection(state.selectedNodes);
-    } else if (state.selectedEdges.length > 0) {
-        // iterate over all selected adges and build array of edge.sourceNode and edge.targetNode without duplicates
-        const nodes = state.selectedEdges.reduce<Node[]>((acc, edge) => {
-            const sourceNode = state.nodes.find(
-                (n) => n.id === edge.source
-            ) as Node;
-            const targetNode: Node = state.nodes.find(
-                (n) => n.id === edge.target
-            ) as Node;
-            if (!acc.includes(sourceNode)) {
-                acc.push(sourceNode);
-            }
-            if (!acc.includes(targetNode)) {
-                acc.push(targetNode);
-            }
-            return acc;
-        }, []);
-        state.fitViewToSelection(nodes);
-    }
-    devLog('zooming to selection');
+    state.fitViewToSelection(state.getSelectedNodes());
+    return;
 };
 const editLineDirection = (_state: CanvasState) => {
     devLog('editing line direction');
@@ -60,7 +39,7 @@ const setBackground = (_state: CanvasState) => {
 export const TOOLBAR_ACTIONS: ActionsListType = {
     removeElements: {
         title: 'Delete',
-        icon: 'Trash',
+        icon: 'Trash2',
         onClick: removeElements,
         allowedNodeTypes: ['note', 'card', 'image', 'group'],
         allowedEdgeTypes: ['base'],
@@ -69,6 +48,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: false,
+        preventClickPropagation: true,
     },
     setColor: {
         title: 'Set color',
@@ -81,6 +61,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
+        preventClickPropagation: false,
     },
     zoomToSelection: {
         title: 'Zoom to selection',
@@ -93,6 +74,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: false,
+        preventClickPropagation: true,
     },
     editLineDirection: {
         title: 'Line direction',
@@ -105,6 +87,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
+        preventClickPropagation: true,
     },
     alignChildren: {
         title: 'Align',
@@ -117,6 +100,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
+        preventClickPropagation: true,
     },
     alignSelection: {
         title: 'Align',
@@ -129,6 +113,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: true,
         requiresSingleType: false,
+        preventClickPropagation: true,
     },
     createGroup: {
         title: 'Create group',
@@ -141,6 +126,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: true,
         requiresSingleType: false,
+        preventClickPropagation: true,
     },
     editNode: {
         title: 'Edit',
@@ -153,6 +139,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
+        preventClickPropagation: true,
     },
     editLabel: {
         title: 'Edit label',
@@ -165,6 +152,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
+        preventClickPropagation: true,
     },
     setBackground: {
         title: 'Set background',
@@ -177,5 +165,6 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
+        preventClickPropagation: true,
     },
 };

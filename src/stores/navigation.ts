@@ -1,3 +1,4 @@
+import { devLog } from '@utils/.';
 import { create } from 'zustand';
 
 type NavigationState = {
@@ -9,12 +10,10 @@ export const useNavigationStore = create<NavigationState>((set) => ({
     headerMenuExpanded: false,
     handleExpandMenu: () => {
         set({ headerMenuExpanded: true });
-        import.meta.env.MODE === 'production' &&
-            console.log('handleExpandMenu');
+        import.meta.env.MODE === 'production' && devLog('handleExpandMenu');
     },
     handleCollapseMenu: () => {
         set({ headerMenuExpanded: false });
-        import.meta.env.MODE === 'production' &&
-            console.log('handleCollapseMenu');
+        import.meta.env.MODE === 'production' && devLog('handleCollapseMenu');
     },
 }));

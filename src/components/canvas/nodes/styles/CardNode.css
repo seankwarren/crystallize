@@ -1,16 +1,16 @@
 .card-node {
     display: flex;
-    padding: var(--md-spacing);
     background-color: var(--dark-bg-color);
     border-radius: var(--md-border-radius);
     min-width: var(--default-node-width);
     min-height: var(--default-node-height);
+    width: 100%;
+    height: 100%;
     box-sizing: border-box;
-    overflow: show;
+    position: relative;
 }
 
 .card-node.selected {
-    position: relative;
     box-shadow: 0px 0px 0px calc(var(--xl-border-width) * 2) var(--accent);
 }
 
@@ -20,8 +20,6 @@
 
 .card-node-backdrop {
     width: 100%;
-    margin: calc(-1 * var(--md-spacing));
-    padding: var(--md-spacing);
     opacity: 0.3;
     filter: brightness(15%);
     border-radius: calc(var(--md-border-radius));
@@ -30,4 +28,25 @@
 
 .card-node-backdrop.selected {
     opacity: 1;
+}
+
+.card-node-content {
+    z-index: 1;
+    position: absolute;
+    background-color: transparent;
+    padding: var(--md-spacing);
+    height: calc(100% - calc(var(--md-spacing) * 2));
+    width: calc(100% - calc(var(--md-spacing) * 2));
+    justify-content: space-between;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.card-node-content::-webkit-scrollbar {
+    scrollbar-color: white transparent;
+}
+
+.card-node-content > p {
+    margin: 0;
+    padding: 0;
 }

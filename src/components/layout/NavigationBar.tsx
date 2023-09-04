@@ -1,3 +1,4 @@
+import { devLog } from '@utils/.';
 import { useState } from 'react';
 import NavigationIcon from './NavigationIcon';
 import './styles/NavigationBar.css';
@@ -5,15 +6,15 @@ import './styles/NavigationBar.css';
 const NavigationBar = () => {
 
     const [isOpenVaultHovered, setIsOpenVaultHovered] = useState<boolean>(false);
-    const handleOpenQuickSwitcher = () => { console.log('handleOpenQuickSwitcher') }
-    const handleOpenGraphView = () => { console.log('handleOpenGraphView') }
-    const handleCreateNewCanvas = () => { console.log('handleCreateNewCanvas') }
-    const handleOpenDailyNote = () => { console.log('handleOpenDailyNote') }
-    const handleInsertTemplate = () => { console.log('handleInsertTemplate') }
-    const handleOpenCommandPalette = () => { console.log('handleOpenCommandPalette') }
-    const handleOpenVault = () => { console.log('handleOpenVault') }
-    const handleOpenHelp = () => { console.log('handleOpenHelp') }
-    const handleOpenSettings = () => { console.log('handleOpenSettings') }
+    const handleOpenQuickSwitcher = () => { devLog('handleOpenQuickSwitcher') }
+    const handleOpenGraphView = () => { devLog('handleOpenGraphView') }
+    const handleCreateNewCanvas = () => { devLog('handleCreateNewCanvas') }
+    const handleOpenDailyNote = () => { devLog('handleOpenDailyNote') }
+    const handleInsertTemplate = () => { devLog('handleInsertTemplate') }
+    const handleOpenCommandPalette = () => { devLog('handleOpenCommandPalette') }
+    const handleOpenVault = () => { devLog('handleOpenVault') }
+    const handleOpenHelp = () => { devLog('handleOpenHelp') }
+    const handleOpenSettings = () => { devLog('handleOpenSettings') }
 
     return (
         <div id="navbar-wrapper">

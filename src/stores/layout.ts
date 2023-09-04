@@ -1,3 +1,4 @@
+import { devLog } from '@utils/.';
 import { create } from 'zustand';
 
 type LayoutState = {
@@ -19,32 +20,32 @@ export const useLayoutStore = create<LayoutState>()((set) => ({
         set((state) => ({
             leftSidebarOpen: !state.leftSidebarOpen,
         }));
-        import.meta.env.MODE === 'production' &&
-            console.log('toggleLeftSidebar');
+        devLog('toggleLeftSidebar');
     },
     leftSidebarWidth: 200,
     setLeftSidebarWidth: (width) => {
         set({ leftSidebarWidth: width });
+        devLog('setLeftSidebarWidth');
     },
     rightSidebarOpen: false,
     toggleRightSidebar: () => {
         set((state) => ({
             rightSidebarOpen: !state.rightSidebarOpen,
         }));
-        import.meta.env.MODE === 'production' &&
-            console.log('toggleRightSidebar');
+        devLog('toggleRightSidebar');
     },
     rightSidebarWidth: 200,
     setRightSidebarWidth: (width) => {
         set({ rightSidebarWidth: width });
+        devLog('setRightSidebarWidth');
     },
     handleMinimize: () => {
-        import.meta.env.MODE === 'production' && console.log('handleMinimize');
+        devLog('handleMinimize');
     },
     handleMaximize: () => {
-        import.meta.env.MODE === 'production' && console.log('handleMaximize');
+        devLog('handleMaximize');
     },
     handleClose: () => {
-        import.meta.env.MODE === 'production' && console.log('handleClose');
+        devLog('handleClose');
     },
 }));

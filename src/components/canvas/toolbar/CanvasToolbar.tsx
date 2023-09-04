@@ -1,44 +1,45 @@
 import NavigationIcon from '@components/layout/NavigationIcon';
 import { ReactFlowState, XYPosition, getRectOfNodes, useStore } from 'reactflow';
-import { CanvasState } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/useCanvasState';
 import { getAllowedToolbarActions } from '../toolbar';
 import { ActionsListType } from '../types';
 import ColorPicker from './ColorPicker';
 import './styles/CanvasToolbar.css';
 
 type Props = {
-    state: CanvasState;
+    store: CanvasStore;
 }
 
-const storeSelector = (state: ReactFlowState) => ({
-    width: state.width,
-    height: state.height,
-    transform: state.transform,
+const storeSelector = (store: ReactFlowState) => ({
+    width: store.width,
+    height: store.height,
+    transform: store.transform,
 });
 
-const CanvasToolbar = ({ state }: Props) => {
+const CanvasToolbar = ({ store }: Props) => {
 
     const { transform } = useStore(storeSelector);
 
-    const actions: ActionsListType = getAllowedToolbarActions(state);
+    const actions: ActionsListType = getAllowedToolbarActions(store);
 
     // if nodes are selected, position it based on them
     const position: XYPosition = { x: 0, y: 0 };
     let className = '';
-    if (state.selectedNodes.length > 0) {
-        const boundingBox = getRectOfNodes(state.selectedNodes);
+    if (store.getSelectedNodes().length > 0) {
+        const boundingBox = getRectOfNodes(store.getSelectedNodes());
+        // TODO: this is off when multiple nodes are selected
         position.x = (boundingBox.x + boundingBox.width / 2) * transform[2] + transform[0]
-        position.y = boundingBox.y * transform[2] + transform[1]
+        position.y = (boundingBox.y) * transform[2] + transform[1]
         className = 'node';
-    } else if (state.selectedEdges.length > 0) {
+    } else if (store.getSelectedEdges().length > 0) {
         // if no nodes are selected, but edges are, position it based on them
-        state.selectedEdges.forEach(edge => {
-            const sourceNode = state.nodes.find((n) => n.id === edge.source);
-            const targetNode = state.nodes.find((n) => n.id === edge.target);
+        store.getSelectedEdges().forEach(edge => {
+            const sourceNode = store.nodes.find((n) => n.id === edge.source);
+            const targetNode = store.nodes.find((n) => n.id === edge.target);
             if (sourceNode && targetNode) {
                 const boundingBox = getRectOfNodes([sourceNode, targetNode]);
                 position.x = (boundingBox.x + boundingBox.width / 2) * transform[2] + transform[0]
-                position.y = (boundingBox.y + boundingBox.height / 2) * transform[2] + transform[1]
+                position.y = (boundingBox.y) * transform[2] + transform[1]
 
             }
         })
@@ -52,15 +53,15 @@ const CanvasToolbar = ({ state }: Props) => {
 
     return (
         <div className={`canvas-toolbar ${className}`} style={positionStyle}>
-            <ColorPicker state={state} open={state.colorSelectorOpen} />
+            <ColorPicker store={store} open={store.colorSelectorOpen} />
             {Object.entries(actions).map(([key, action]) => {
                 return (
                     <NavigationIcon
                         key={key}
                         icon={action.icon}
                         onClick={(e) => {
-                            e.stopPropagation();
-                            action.onClick(state);
+                            action.onClick(store);
+                            (!action.preventClickPropagation && e.stopPropagation());
                         }} />
                 )
             })}

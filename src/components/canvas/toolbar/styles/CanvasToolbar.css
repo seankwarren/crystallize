@@ -12,11 +12,11 @@
 }
 
 .node {
-    translate: -50% -140%;
+    translate: -50% calc(-100% - var(--md-spacing));
 }
 
 .edge {
-    translate: -50% -50%;
+    /* translate: -50% -50%; */
 }
 
 .canvas-toolbar > .nav-icon-container {

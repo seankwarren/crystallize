@@ -1,21 +1,21 @@
 import { useCallback, useState } from 'react';
 import { Edge, Node } from 'reactflow';
-import { CanvasState } from './useCanvasState';
+import { CanvasStore } from './useCanvasState';
 
 type UseUndoRedoOptions = {
     maxHistorySize?: number;
 };
 
 type UseUndoRedo = (options: UseUndoRedoOptions) => {
-    undo: (state: CanvasState) => void;
-    redo: (state: CanvasState) => void;
+    undo: (store: CanvasStore) => void;
+    redo: (store: CanvasStore) => void;
 
-    takeSnapshot: (state: CanvasState) => void;
+    takeSnapshot: (store: HistoryItem) => void;
     canUndo: boolean;
     canRedo: boolean;
 };
 
-type HistoryItem = {
+export type HistoryItem = {
     nodes: Node[];
     edges: Edge[];
 };
@@ -27,12 +27,12 @@ export const useUndoRedo: UseUndoRedo = ({
     const [future, setFuture] = useState<HistoryItem[]>([]);
 
     const takeSnapshot = useCallback(
-        (state: CanvasState) => {
+        (store: HistoryItem) => {
             setPast((past) => [
                 ...past.slice(past.length - maxHistorySize + 1, past.length),
                 {
-                    nodes: state.nodes,
-                    edges: state.edges,
+                    nodes: store.nodes,
+                    edges: store.edges,
                 },
             ]);
 
@@ -42,7 +42,7 @@ export const useUndoRedo: UseUndoRedo = ({
     );
 
     const undo = useCallback(
-        (state: CanvasState) => {
+        (store: CanvasStore) => {
             const pastState = past[past.length - 1];
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (pastState) {
@@ -50,19 +50,19 @@ export const useUndoRedo: UseUndoRedo = ({
                 setFuture((future) => [
                     ...future,
                     {
-                        nodes: state.nodes,
-                        edges: state.edges,
+                        nodes: store.nodes,
+                        edges: store.edges,
                     },
                 ]);
-                state.setNodes(pastState.nodes);
-                state.setEdges(pastState.edges);
+                store.setNodes(pastState.nodes);
+                store.setEdges(pastState.edges);
             }
         },
         [past]
     );
 
     const redo = useCallback(
-        (state: CanvasState) => {
+        (store: CanvasStore) => {
             const futureState = future[future.length - 1];
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             if (futureState) {
@@ -70,12 +70,12 @@ export const useUndoRedo: UseUndoRedo = ({
                 setPast((past) => [
                     ...past,
                     {
-                        nodes: state.nodes,
-                        edges: state.edges,
+                        nodes: store.nodes,
+                        edges: store.edges,
                     },
                 ]);
-                state.setNodes(futureState.nodes);
-                state.setEdges(futureState.edges);
+                store.setNodes(futureState.nodes);
+                store.setEdges(futureState.edges);
             }
         },
         [future]

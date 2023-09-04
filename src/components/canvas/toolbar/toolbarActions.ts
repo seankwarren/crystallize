@@ -28,11 +28,11 @@ export const getAllowedToolbarActions = (
 ): ActionsListType => {
     const filteredActions = Object.entries(TOOLBAR_ACTIONS).filter(
         ([, action]) => {
-            const numNodes = state.selectedNodes.length;
-            const numEdges = state.selectedEdges.length;
+            const numNodes = state.getSelectedNodes().length;
+            const numEdges = state.getSelectedEdges().length;
 
             const allNodesMatchTypes = allTypesMatch(
-                state.selectedNodes,
+                state.getSelectedNodes(),
                 action.allowedNodeTypes
             );
             // const allEdgesMatchTypes = allTypesMatch(
@@ -40,11 +40,11 @@ export const getAllowedToolbarActions = (
             //     action.allowedEdgeTypes
             // );
             const someNodesMatchTypes = someTypesMatch(
-                state.selectedNodes,
+                state.getSelectedNodes(),
                 action.allowedNodeTypes
             );
             const someEdgesMatchTypes = someTypesMatch(
-                state.selectedEdges,
+                state.getSelectedEdges(),
                 action.allowedEdgeTypes
             );
 

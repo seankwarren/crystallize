@@ -3,7 +3,7 @@ import CardNode from './CardNode';
 import GroupNode from './GroupNode';
 import ImageNode from './ImageNode';
 import NoteNode from './NoteNode';
-import initialNodes from './initialNodes';
+import { draggingCardNode, initialNodes, introNode } from './nodeLibrary';
 import nodeTypes, { NodeTypes } from './nodeTypes';
 
 export {
@@ -12,7 +12,9 @@ export {
     GroupNode,
     ImageNode,
     NoteNode,
+    draggingCardNode,
     initialNodes,
+    introNode,
     nodeTypes,
 };
 export type { NodeTypes };

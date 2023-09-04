@@ -1,22 +1,22 @@
 import { useCallback } from 'react';
-import { Position } from 'reactflow';
-import { Handle } from '../handles';
+import { Handle, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
+import { defaultNodeHeight, defaultNodeWidth } from '../styles/styles';
+import { ColorType, NodeData } from '../types';
 import './styles/CardNode.css';
-
-export type ColorType = `#${string}` | `rgb(${string}}` | ''
-
-export type NodeData = {
-    color?: ColorType
-}
 
 type Props = {
     id: string;
     selected: boolean;
     data: NodeData;
 }
+
+const handleStyle = {
+    background: 'none',
+    border: 'none',
+};
+
 const CardNode = ({ id, selected, data }: Props) => {
 
-    // const { id, selected, data } = props
     const { color } = data;
 
     const boxShadow = useCallback((color: ColorType | undefined): string => {
@@ -36,12 +36,115 @@ const CardNode = ({ id, selected, data }: Props) => {
     }, [selected])
 
     return (
-        <div className={`card-node ${selected && 'selected'}`} style={{ boxShadow: boxShadow(color) }}>
+        <div className={`card-node ${selected && 'selected'} nowheel`} style={{ boxShadow: boxShadow(color) }}>
+
             <div className={`card-node-backdrop ${selected && 'selected'}`} style={{ backgroundColor: color }}></div>
+
+
+            <NodeResizeControl
+                position='top'
+                variant={ResizeControlVariant.Line}
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(calc(var(--md-spacing) / 2), -75%)',
+                    width: 'calc(100% - var(--md-spacing))',
+                    height: 'var(--sm-spacing)',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='right'
+                variant={ResizeControlVariant.Line}
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(-25%, calc(var(--md-spacing) / 2))',
+                    width: 'var(--sm-spacing)',
+                    height: 'calc(100% - var(--md-spacing))',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='bottom'
+                variant={ResizeControlVariant.Line}
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(calc(var(--md-spacing) / 2), -25%)',
+                    width: 'calc(100% - var(--md-spacing))',
+                    height: 'var(--sm-spacing)',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='left'
+                variant={ResizeControlVariant.Line}
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(-75%, calc(var(--md-spacing) / 2))',
+                    width: 'var(--sm-spacing)',
+                    height: 'calc(100% - var(--md-spacing))',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='top-left'
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(-50%, -50%)',
+                    width: 'var(--md-spacing)',
+                    height: 'var(--md-spacing)',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+                {/* <div className="resize-handle top-left-handle" /> */}
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='top-right'
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(-50%, -50%)',
+                    width: 'var(--md-spacing)',
+                    height: 'var(--md-spacing)',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+                <div className="resize-handle top-right-handle" />
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='bottom-right'
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(-50%, -50%)',
+                    width: 'var(--md-spacing)',
+                    height: 'var(--md-spacing)',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+                <div className="resize-handle bottom-right-handle" />
+            </NodeResizeControl>
+            <NodeResizeControl
+                position='bottom-left'
+                style={{
+                    ...handleStyle,
+                    transform: 'translate(-50%, -50%)',
+                    width: 'var(--md-spacing)',
+                    height: 'var(--md-spacing)',
+                }}
+                minWidth={defaultNodeWidth}
+                minHeight={defaultNodeHeight}>
+                <div className="resize-handle bottom-left-handle" />
+            </NodeResizeControl>
+
             <Handle type="source" position={Position.Left} id={`${id}-left`} />
             <Handle type="source" position={Position.Top} id={`${id}-top`} />
             <Handle type="source" position={Position.Right} id={`${id}-right`} />
             <Handle type="source" position={Position.Bottom} id={`${id}-bottom`} />
+
+            <div className='card-node-content'>{data.label}</div>
+
         </ div>
     )
 }

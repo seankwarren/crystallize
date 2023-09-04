@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactFlow, {
     Background,
     ConnectionMode,
-    ReactFlowInstance,
-    useOnSelectionChange,
-    useReactFlow
+    SelectionMode,
+    useOnSelectionChange
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { CanvasControls, CanvasNodeMenu } from '.';
-import { edgeTypes, initialEdges } from './edges';
+import { edgeTypes } from './edges';
 import { useCanvasState, useDragAndDrop, useUndoRedo } from './hooks';
-import { initialNodes, nodeTypes } from './nodes';
+import { introNode, nodeTypes } from './nodes';
 import HelperLines from './overlays/CanvasHelperLines';
 import './styles/Canvas.css';
 import { snapGridInterval } from './styles/styles';
@@ -29,71 +28,40 @@ const Canvas = () => {
         takeSnapshot
     } = useUndoRedo({});
 
-    const state = useCanvasState({ takeSnapshot });
+    const initialState = {
+        nodes: [],
+        edges: [],
+        snapToGrid: true,
+        snapToObjects: false,
+        isInteractive: true,
+        colorSelectorOpen: false,
+    }
+    const store = useCanvasState({ initialState, takeSnapshot });
 
     const {
-        // nodes,
+        canvasRef,
         setNodes,
         setSelectedNodes,
-        // applyNodeChanges,
-        // edges,
         setEdges,
         setSelectedEdges,
-        applyNodeChanges,
-        applyEdgeChanges,
+        onNodesChange,
+        onEdgesChange,
         onConnect,
         snapToGrid,
-        isInteractive
-    } = state;
+        isInteractive,
+        zoomTo
+    } = store;
 
 
     const {
-        setCanvasInstance,
-        canvasWrapper,
         onNodeDragStart,
         onSelectionDragStart,
         onNodesDelete,
         onEdgesDelete,
-        onDragOver,
+        onDrag,
         onDrop,
-    } = useDragAndDrop({ state, takeSnapshot });
-
-    const { zoomTo } = useReactFlow();
-
-    // experimental feature: helper lines
-    // const customApplyNodeChanges = useCallback((changes: NodeChange[], nodes: Node[]): Node[] => {
-    //     // reset the helper lines (clear existing lines, if any)
-    //     setHelperLineHorizontal(undefined);
-    //     setHelperLineVertical(undefined);
-
-    //     // this will be true if it's a single node being dragged
-    //     // inside we calculate the helper lines and snap position for the position where the node is being moved to
-    //     if (
-    //         changes.length === 1 &&
-    //         changes[0].type === 'position' &&
-    //         changes[0].dragging && changes[0].position
-    //     ) {
-    //         const helperLines = getHelperLines(changes[0], nodes);
-
-    //         // if we have a helper line, we snap the node to the helper line position
-    //         // this is being done by manipulating the node position inside the change object
-    //         changes[0].position.x = helperLines.snapPosition.x ?? changes[0].position.x;
-    //         changes[0].position.y = helperLines.snapPosition.y ?? changes[0].position.y;
-
-    //         // if helper lines are returned, we set them so that they can be displayed
-    //         setHelperLineHorizontal(helperLines.horizontal);
-    //         setHelperLineVertical(helperLines.vertical);
-    //     }
-
-    //     return applyNodeChanges(changes);
-    // }, [applyNodeChanges]);
-
-    // const onNodesChange: OnNodesChange = useCallback(
-    //     (changes) => {
-    //         setNodes(customApplyNodeChanges(changes, nodes));
-    //     },
-    //     [nodes, setNodes, customApplyNodeChanges]
-    // );
+        onDragEnd,
+    } = useDragAndDrop({ store, takeSnapshot });
 
     useOnSelectionChange({
         onChange: ({ nodes, edges }) => {
@@ -103,24 +71,30 @@ const Canvas = () => {
     });
 
 
-    const onInit = ((instance: ReactFlowInstance) => {
-        setNodes(initialNodes);
-        setEdges(initialEdges);
-        setCanvasInstance(instance);
-        zoomTo(1);
+    const onInit = (() => {
+        setNodes([introNode]);
+        setEdges([]);
+        zoomTo(.1);
     })
 
+    useEffect(() => {
+        document.addEventListener('dragend', onDragEnd);
+        return () => {
+            document.removeEventListener('dragend', onDragEnd);
+        };
+    }, []);
+
     return (
-        <div className="canvas-container" ref={canvasWrapper}>
+        <div className="canvas-container" ref={canvasRef}>
             {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-            {state &&
+            {store &&
                 <ReactFlow
-                    nodes={state.nodes}
-                    edges={state.edges}
+                    nodes={store.nodes}
+                    edges={store.edges}
                     nodeTypes={nodeTypes}
                     edgeTypes={edgeTypes}
-                    onNodesChange={applyNodeChanges}
-                    onEdgesChange={applyEdgeChanges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
                     snapGrid={[snapGridInterval, snapGridInterval]}
                     snapToGrid={snapToGrid}
@@ -135,10 +109,16 @@ const Canvas = () => {
                     onEdgesDelete={onEdgesDelete}
                     onInit={onInit}
                     onDrop={onDrop}
-                    onDragOver={onDragOver}
+                    onDragOver={onDrag}
+                    // onDragEnd={onDragEnd}
+                    minZoom={0.1}
+                    maxZoom={2}
+                    // nodeOrigin={[0.5, 0.5]}
                     connectionMode={ConnectionMode.Loose}
                     selectionKeyCode="Meta"
                     multiSelectionKeyCode="Shift"
+                    panOnDrag={true}
+                    selectionMode={SelectionMode.Partial}
                     fitView
                     className="canvas">
                     <Background
@@ -147,13 +127,13 @@ const Canvas = () => {
                         color="var(--md-border-color)" />
                     <CanvasControls
                         className="canvas-controls"
-                        state={state}
+                        store={store}
                         undo={undo}
                         redo={redo}
                         canUndo={canUndo}
                         canRedo={canRedo} />
-                    <CanvasNodeMenu />
-                    <CanvasToolbar state={state} />
+                    <CanvasNodeMenu store={store} />
+                    <CanvasToolbar store={store} />
                     <HelperLines horizontal={helperLineHorizontal} vertical={helperLineVertical} />
                 </ReactFlow>
             }

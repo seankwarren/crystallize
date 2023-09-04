@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { CanvasState } from '../hooks/useCanvasState';
-import { EdgeData, NodeData } from '../types';
+import { CanvasStore } from '../hooks/useCanvasState';
+import { ColorType, EdgeData } from '../types';
 import './styles/ColorPicker.css';
 
 type Props = {
-    state: CanvasState
+    store: CanvasStore
     open: boolean;
 }
 
-const DEFAULT_COLORS = [
+const DEFAULT_COLORS: ColorType[] = [
     '#808080',
     'rgb(251, 70, 76)',
     'rgb(233, 151, 63)',
@@ -18,44 +18,46 @@ const DEFAULT_COLORS = [
     'rgb(168, 130, 255)',
 ]
 
-const ColorPicker = ({ state, open = false }: Props) => {
+const ColorPicker = ({ store, open = false }: Props) => {
 
     const colorPickerRef = useRef<HTMLDivElement>(null);
 
     const handleDocumentClick: EventListener = useCallback((e) => {
-        state.setColorSelectorOpen(false);
-    }, [state]);
+
+        if (colorPickerRef.current && colorPickerRef.current.contains(e.target as Node)) return
+
+        store.setColorSelectorOpen(false);
+    }, [store]);
 
     useEffect(() => {
         document.addEventListener('click', handleDocumentClick);
         return () => {
             document.removeEventListener('click', handleDocumentClick);
         };
-    }, []);
+    }, [handleDocumentClick]);
 
-    const onHover = (event: React.MouseEvent<HTMLDivElement>, color: string) => {
-        const boxShadow = color ? getBoxShadow(color) : getBoxShadow(event.currentTarget.style.backgroundColor);
+    const onHover = (event: React.MouseEvent<HTMLDivElement>, color: ColorType) => {
+        const boxShadow = color ? getBoxShadow(color) : getBoxShadow(event.currentTarget.style.backgroundColor as ColorType);
         event.currentTarget.style.boxShadow = boxShadow
-        console.log(color, getBoxShadow(color));
     }
 
-    const onLeave = (event: React.MouseEvent<HTMLDivElement>, color: string) => {
+    const onLeave = (event: React.MouseEvent<HTMLDivElement>, color: ColorType) => {
         event.currentTarget.style.boxShadow = checkSelectedColors() === color ? getBoxShadow(color) : 'none';
     }
 
-    const onSetColors = useCallback((color: string) => {
-        state.setColors(color, state.selectedNodes, state.selectedEdges);
-        state.setColorSelectorOpen(false);
-    }, [state]);
+    const onSetColors = useCallback((color: ColorType) => {
+        store.setColors(color, store.getSelectedNodes(), store.getSelectedEdges());
+        store.setColorSelectorOpen(false);
+    }, [store]);
 
     const checkSelectedColors = () => {
-        const nodeColors = state.selectedNodes.map(node => (node.data as NodeData).color);
-        const edgeColors = state.selectedEdges.map(edge => (edge.data as EdgeData).color);
+        const nodeColors = store.getSelectedNodes().map(node => node.data.color);
+        const edgeColors = store.getSelectedEdges().map(edge => (edge.data as EdgeData).color);
         const allColors = [...nodeColors, ...edgeColors];
         return allColors.length > 0 && allColors.every(color => color === allColors[0]) ? allColors[0] : null;
     };
 
-    const getBoxShadow = (color: string) => {
+    const getBoxShadow = (color: ColorType) => {
         return `var(--main-bg-color) 0px 0px 0px var(--lg-border-width), ${color} 0px 0px 0px calc(var(--lg-border-width)*2)`;
     };
 

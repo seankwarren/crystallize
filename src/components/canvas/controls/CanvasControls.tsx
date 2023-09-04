@@ -1,19 +1,20 @@
-import { Panel, useReactFlow } from '@reactflow/core';
+import { Panel } from '@reactflow/core';
 import { MouseEventHandler, useEffect, useState } from 'react';
 
-import { CanvasState } from '@components/canvas/hooks/useCanvasState';
+import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
 import { canvasMenuWidth, controlIconSize, disabledMenuIconColor } from '@components/canvas/styles/styles';
 import Icon from '@components/generic/Icon';
 import { PanelPosition } from 'reactflow';
-import { CanvasOptions, ControlButton } from '..';
+import CanvasOptions from './CanvasOptions';
+import ControlButton from './ControlButton';
 import './styles/CanvasControls.css';
 
 type Props = {
     className?: string
     position?: PanelPosition
-    state: CanvasState
-    undo: (state: CanvasState) => void
-    redo: (state: CanvasState) => void
+    store: CanvasStore
+    undo: (store: CanvasStore) => void
+    redo: (store: CanvasStore) => void
     canUndo: boolean
     canRedo: boolean
 }
@@ -21,7 +22,7 @@ type Props = {
 const CanvasControls = ({
     className,
     position = 'top-right',
-    state,
+    store,
     undo,
     redo,
     canUndo,
@@ -31,8 +32,7 @@ const CanvasControls = ({
     const [isMenuVisible, setIsMenuVisible] = useState<boolean>(false);
     const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
 
-    const { isInteractive, toggleIsInteractive } = state;
-    const { zoomIn, zoomOut, zoomTo, fitView } = useReactFlow();
+    const { isInteractive, toggleIsInteractive, zoomIn, zoomOut, zoomTo, fitView } = store;
 
     const onZoomInHandler = () => {
         zoomIn();
@@ -56,7 +56,7 @@ const CanvasControls = ({
         setIsMenuVisible(true);
         setMenuPosition({
             top: clientY,
-            left: clientX - canvasMenuWidth - 20,
+            left: clientX - canvasMenuWidth - 25,
         });
     };
 
@@ -69,11 +69,11 @@ const CanvasControls = ({
     }
 
     const onRedoHandler = () => {
-        redo(state);
+        redo(store);
     }
 
     const onUndoHandler = () => {
-        undo(state);
+        undo(store);
     }
 
     const onOpenHelpModal = () => { }
@@ -93,7 +93,7 @@ const CanvasControls = ({
         <>
             <CanvasOptions
                 closeMenu={onCloseMenu}
-                state={state}
+                store={store}
                 style={{ ...menuPosition, display: isMenuVisible ? 'flex' : 'none' }} />
             <Panel
                 className={`canvas-controls ${className}`}

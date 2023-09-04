@@ -94,8 +94,8 @@ const ColorWheelIcon = ({ size = 100 }: Props) => {
     useEffect(() => {
         if (!colorWheelIconRef.current) return;
         const ctx = colorWheelIconRef.current.getContext('2d');
-        drawCircle(ctx, size);
-    }, [])
+        ctx && drawCircle(ctx, size);
+    }, [size])
 
     return (
         <div style={{ width: size, height: size }}>

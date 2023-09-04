@@ -1,131 +1,177 @@
-import { DragEventHandler, useCallback, useRef, useState } from 'react';
+import { devLog } from '@utils/.';
+import { DragEventHandler, useCallback } from 'react';
 import {
-    Node,
+    Node as CanvasNode,
+    NodeChange,
     NodeDragHandler,
     OnEdgesDelete,
     OnNodesDelete,
-    ReactFlowInstance,
     SelectionDragHandler,
 } from 'reactflow';
-import { draggingCardNode } from '../nodes/initialNodes';
-import { defaultNodeHeight, defaultNodeWidth } from '../styles/styles';
-import { CanvasState } from './useCanvasState';
+import ShortUniqueId from 'short-unique-id';
+import { draggingCardNode } from '../nodes';
+import { CanvasStore } from './useCanvasState';
+import { HistoryItem } from './useUndoRedo';
 
 type Props = {
-    state: CanvasState;
-    takeSnapshot: (state: CanvasState) => void;
+    store: CanvasStore;
+    takeSnapshot: (store: HistoryItem) => void;
 };
 
-let id = 0;
-const getId = () => `dndnode_${id++}`; // TODO: make a getId function
+const uid = new ShortUniqueId({ length: 10 });
 
-const useDragAndDrop = ({ state, takeSnapshot }: Props) => {
-    const [canvasInstance, setCanvasInstance] =
-        useState<ReactFlowInstance | null>(null);
-    const canvasWrapper = useRef<HTMLDivElement>(null);
-
+const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
     const onNodeDragStart: NodeDragHandler = useCallback(() => {
-        takeSnapshot(state);
-    }, [takeSnapshot, state]);
+        takeSnapshot({
+            nodes: store.nodes,
+            edges: store.edges,
+        });
+    }, [takeSnapshot, store]);
 
     const onSelectionDragStart: SelectionDragHandler = useCallback(() => {
-        takeSnapshot(state);
-    }, [takeSnapshot, state]);
+        takeSnapshot({
+            nodes: store.nodes,
+            edges: store.edges,
+        });
+    }, [takeSnapshot, store]);
 
     const onNodesDelete: OnNodesDelete = useCallback(() => {
-        takeSnapshot(state);
-    }, [takeSnapshot, state]);
+        takeSnapshot({
+            nodes: store.nodes,
+            edges: store.edges,
+        });
+    }, [takeSnapshot, store]);
 
     const onEdgesDelete: OnEdgesDelete = useCallback(() => {
-        takeSnapshot(state);
-    }, [takeSnapshot, state]);
+        takeSnapshot({
+            nodes: store.nodes,
+            edges: store.edges,
+        });
+    }, [takeSnapshot, store]);
 
-    const onDragOver: DragEventHandler<HTMLDivElement> = useCallback(
+    const onDrag: DragEventHandler = useCallback(
         (event) => {
             event.preventDefault();
-
-            if (canvasWrapper.current && canvasInstance) {
+            event.dataTransfer.dropEffect = 'move';
+            if (store.canvasRef.current) {
                 const reactFlowBounds =
-                    canvasWrapper.current.getBoundingClientRect();
+                    store.canvasRef.current.getBoundingClientRect();
 
-                const position = canvasInstance.project({
-                    x:
-                        event.clientX -
-                        reactFlowBounds.left -
-                        defaultNodeWidth / 2,
-                    y:
-                        event.clientY -
-                        reactFlowBounds.top -
-                        defaultNodeHeight / 2,
+                const position = store.project({
+                    x: event.clientX - reactFlowBounds.left,
+                    y: event.clientY - reactFlowBounds.top,
                 });
 
-                const draggedNode = {
-                    ...draggingCardNode,
+                const nodeChange: NodeChange = {
+                    id: draggingCardNode.id,
+                    type: 'position',
                     position,
                 };
-                console.log(draggedNode);
-                // state.deleteElements(
-                //     [
-                //         state.nodes.find((n) => n.id === 'dragging-card'),
-                //     ] as Node[],
-                //     []
-                // );
-                state.addNode(draggedNode);
+                store.updateNode(draggingCardNode.id, [nodeChange]);
             }
-            event.dataTransfer.dropEffect = 'move';
         },
-        [state]
+        [store]
     );
 
     const onDrop: DragEventHandler = useCallback(
         (event) => {
-            event.preventDefault();
-
-            if (canvasWrapper.current && canvasInstance) {
-                const reactFlowBounds =
-                    canvasWrapper.current.getBoundingClientRect();
-                const type = event.dataTransfer.getData(
-                    'application/reactflow'
-                );
-
-                // check if the dropped element is valid
-                if (typeof type === 'undefined' || !type) {
-                    return;
-                }
-
-                const position = canvasInstance.project({
-                    x:
-                        event.clientX -
-                        reactFlowBounds.left -
-                        defaultNodeWidth / 2,
-                    y:
-                        event.clientY -
-                        reactFlowBounds.top -
-                        defaultNodeHeight / 2,
-                });
-
-                const newNode: Node = {
-                    id: getId(),
-                    type,
-                    position,
-                    data: { label: `${type} node` },
-                };
-
-                state.addNode(newNode);
+            // event.preventDefault();
+            if (!store.canvasRef.current) return;
+            console.log(event.dataTransfer);
+            const type = event.dataTransfer.getData('application/reactflow');
+            // check if the dropped element is valid
+            if (typeof type === 'undefined' || !type) {
+                return;
             }
+            const reactFlowBounds =
+                store.canvasRef.current.getBoundingClientRect();
+            devLog(`type dropped: ${type}`);
+            const draggedNode = store.nodes.find(
+                (n) => n.id === 'dragging-card'
+            );
+            if (!draggedNode) {
+                console.warn("couldn't find dragged node");
+                return;
+            }
+            const position = store.project({
+                x: event.clientX - reactFlowBounds.left,
+                y: event.clientY - reactFlowBounds.top,
+            });
+            const newNode: CanvasNode = {
+                id: `card-node-${uid()}`,
+                type,
+                position,
+                data: { label: `${type} node` },
+                selected: false,
+            };
+            takeSnapshot({
+                nodes: store.nodes,
+                edges: store.edges,
+            });
+            store.addNode(newNode);
+            store.deleteElements([draggedNode], []);
+            store.setSelectedNodes([newNode]);
+            store.setSelectedEdges([]);
         },
-        [canvasInstance, takeSnapshot, state]
+        [store, takeSnapshot]
+    );
+
+    // TODO: fix this
+    const onDragEnd = useCallback(
+        (event: DragEvent) => {
+            // event.preventDefault();
+            if (!event.dataTransfer || !store.canvasRef.current) return;
+            if (event.dataTransfer.dropEffect !== 'none') return;
+            console.log('drag ended outside of canvas');
+            console.log(event.dataTransfer);
+            const type = event.dataTransfer.getData('application/reactflow');
+
+            console.log(type);
+            // check if the dropped element is valid
+            if (typeof type === 'undefined' || !type) {
+                return;
+            }
+            const reactFlowBounds =
+                store.canvasRef.current.getBoundingClientRect();
+            devLog(`type dropped: ${type}`);
+            const draggedNode = store.nodes.find(
+                (n) => n.id === 'dragging-card'
+            );
+            if (!draggedNode) {
+                console.warn("couldn't find dragged node");
+                return;
+            }
+            const position = store.project({
+                x: event.clientX - reactFlowBounds.left,
+                y: event.clientY - reactFlowBounds.top,
+            });
+            const newNode: CanvasNode = {
+                id: `card-node-${uid()}`,
+                type,
+                position,
+                data: { label: `${type} node` },
+                selected: false,
+            };
+            takeSnapshot({
+                nodes: store.nodes,
+                edges: store.edges,
+            });
+            store.addNode(newNode);
+            store.deleteElements([draggedNode], []);
+            store.setSelectedNodes([newNode]);
+            store.setSelectedEdges([]);
+        },
+        [store, takeSnapshot]
     );
 
     return {
-        setCanvasInstance,
-        canvasWrapper,
         onNodeDragStart,
         onSelectionDragStart,
         onNodesDelete,
         onEdgesDelete,
-        onDragOver,
+        onDrag,
         onDrop,
+        onDragEnd,
     };
 };
 

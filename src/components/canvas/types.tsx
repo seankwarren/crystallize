@@ -1,9 +1,7 @@
-import { NodeTypes } from '@components/canvas/nodes/nodeTypes';
-import { IconName } from '@components/generic/Icon';
-import type { FitViewOptions, PanelPosition } from '@reactflow/core';
-import type { ButtonHTMLAttributes, HTMLAttributes } from 'react';
+import { IconName } from '../generic/Icon';
 import { EdgeTypes } from './edges';
 import { CanvasState } from './hooks/useCanvasState';
+import { NodeTypes } from './nodes/nodeTypes';
 
 type ActionFunction =
     | ((state: CanvasState) => void);
@@ -40,26 +38,27 @@ export type ActionType = {
      * (i.e., all elements must be of type 'card').
      */
     requiresSingleType: boolean;
+    /**
+     * Specifies if the element should propate click events to the canvas.
+     */
+    preventClickPropagation: boolean;
 };
 
 export type ActionsListType = {
     [key: string]: ActionType;
 };
 
-export type ControlProps = HTMLAttributes<HTMLDivElement> & {
-    fitViewOptions?: FitViewOptions;
-    onInteractiveChange?: (interactiveStatus: boolean) => void;
-    position?: PanelPosition;
-};
-
-export type ControlButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
-
-export type Transform = [number, number, number];
+export type ColorType =
+    | `#${string}`
+    | `rgb(${number}, ${number}, ${number})`
+    | '';
 
 export interface NodeData {
-    color: string;
+    color: ColorType;
+    label?: string | JSX.Element;
 }
 
 export interface EdgeData {
     color: string;
+    label?: string;
 }

@@ -1,4 +1,4 @@
-import { CanvasState } from '@components/canvas/hooks/useCanvasState';
+import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
 import { menuIconSize } from '@components/canvas/styles/styles';
 import Icon, { IconName } from '@components/generic/Icon';
 import { CSSProperties } from 'react';
@@ -6,7 +6,7 @@ import './styles/CanvasOptions.css';
 type Props = {
     closeMenu: () => void;
     style?: CSSProperties;
-    state: CanvasState;
+    store: CanvasStore;
 }
 
 const OptionIcon = (name: IconName, className: string = '') => {
@@ -14,7 +14,7 @@ const OptionIcon = (name: IconName, className: string = '') => {
         <Icon name={name} size={menuIconSize} color="var(--primary-font-color)" className={`menu-item-icon ${className}`} />
     )
 }
-const CanvasOptions = ({ closeMenu, style, state }: Props) => {
+const CanvasOptions = ({ closeMenu, style, store }: Props) => {
 
     const {
         snapToGrid,
@@ -23,13 +23,26 @@ const CanvasOptions = ({ closeMenu, style, state }: Props) => {
         toggleSnapToObjects,
         isInteractive,
         toggleIsInteractive
-    } = state;
+    } = store;
+
+    const handleToggleSnapToGrid = () => {
+        toggleSnapToGrid();
+        closeMenu();
+    }
+    const handleToggleSnapToObjects = () => {
+        toggleSnapToObjects();
+        closeMenu();
+    }
+    const handleToggleIsInteractive = () => {
+        toggleIsInteractive();
+        closeMenu();
+    }
 
     return (
         <div className="canvas-options-menu" style={style}>
             <div
                 className="menu-item"
-                onClick={() => { toggleSnapToGrid(); closeMenu() }}>
+                onClick={handleToggleSnapToGrid}>
                 <div className='menu-item-label'>
                     {OptionIcon('Grid3x3')}
                     <span>Snap to grid</span>
@@ -38,7 +51,7 @@ const CanvasOptions = ({ closeMenu, style, state }: Props) => {
             </div>
             <div
                 className="menu-item"
-                onClick={() => { toggleSnapToObjects(); closeMenu() }}>
+                onClick={handleToggleSnapToObjects}>
                 <div className='menu-item-label'>
                     {OptionIcon('GitPullRequestDraft')}
                     <span>Snap to objects</span>
@@ -47,7 +60,7 @@ const CanvasOptions = ({ closeMenu, style, state }: Props) => {
             </div>
             <div
                 className="menu-item"
-                onClick={() => { toggleIsInteractive(); closeMenu() }}>
+                onClick={handleToggleIsInteractive}>
                 <div className='menu-item-label'>
                     {OptionIcon('Lock')}
                     <span>Read-only</span>

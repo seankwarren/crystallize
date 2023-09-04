@@ -12,8 +12,8 @@ const CustomEdge = ({
     sourcePosition,
     targetPosition,
     style = {},
-    markerStart,
-    markerEnd,
+    // markerStart,
+    // markerEnd,
     selected,
 }: Props) => {
 
