@@ -7,7 +7,7 @@ import {
     SelectionDragHandler,
 } from 'reactflow';
 import ShortUniqueId from 'short-unique-id';
-import { NodeTypes, draggingCardNode } from '../nodes';
+import { NodeTypes, draggingCardNode, introNode } from '../nodes';
 import { getCenterNodeOnCoords, getDefaultNodeSize } from '../nodes/utils';
 import { CanvasStore } from './useCanvasState';
 import { HistoryItem } from './useUndoRedo';
@@ -142,23 +142,14 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
                 selected: false,
             };
 
-            console.log(
-                'adding node with dimension: ',
-                defaultWidth,
-                defaultHeight
-            );
-
-            store.deleteElements([draggedNode], []);
-
             takeSnapshot({
                 nodes: store.nodes.filter((node) => node.id !== draggedNode.id),
                 edges: store.edges,
             });
 
-            console.log('new node', newNode);
+            store.deleteElements([draggedNode, introNode], []);
             store.addNode(newNode);
             store.setSelectedNodes([newNode]);
-            store.setSelectedEdges([]);
         },
         [store, takeSnapshot]
     );
