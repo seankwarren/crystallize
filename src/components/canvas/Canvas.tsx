@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactFlow, {
     Background,
     ConnectionMode,
@@ -59,7 +59,7 @@ const Canvas = () => {
         onDragStart,
         onDrag,
         onDrop,
-        // onDragEnd,
+        onDragEnd,
     } = useDragAndDrop({ store, takeSnapshot });
 
     useOnSelectionChange({
@@ -74,12 +74,12 @@ const Canvas = () => {
         setEdges([]);
     })
 
-    // useEffect(() => {
-    //     document.addEventListener('dragend', onDragEnd);
-    //     return () => {
-    //         document.removeEventListener('dragend', onDragEnd);
-    //     };
-    // }, [onDragEnd]);
+    useEffect(() => {
+        document.addEventListener('dragend', onDragEnd);
+        return () => {
+            document.removeEventListener('dragend', onDragEnd);
+        };
+    }, [onDragEnd]);
 
     return (
         <div className="canvas-container" ref={canvasRef}>

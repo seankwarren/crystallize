@@ -155,7 +155,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
     };
 
     const addEdge = (edge: Edge) => {
-        takeSnapshot({ nodes, edges });
+        // takeSnapshot({ nodes, edges });
         addEdges([edge]);
     };
     const getEdge = (id: string) => edges.find((edge) => edge.id === id);
@@ -199,8 +199,8 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
             return prev.filter((edge) => !edgesToDelete.includes(edge));
         });
         setNodes((prev) => {
-            const nodesToDelete = nodes;
-            return prev.filter((node) => !nodesToDelete.includes(node));
+            const nodesIdsToDelete = new Set(nodes.map((n) => n.id));
+            return prev.filter((node) => !nodesIdsToDelete.has(node.id));
         });
     };
 

@@ -53,12 +53,11 @@ const useResizable = ({
 
     const stopResizing = useCallback(() => {
         setIsResizing(false);
-        console.log('stop resizing', sidebarWidth, initialWidth);
         if (sidebarWidth === 0) {
             toggleSidebar();
             handleSaveWidth(defaultSidebarWidth);
         }
-    }, [sidebarWidth, toggleSidebar, handleSaveWidth, initialWidth]);
+    }, [sidebarWidth, toggleSidebar, handleSaveWidth]);
 
     useEffect(() => {
         window.addEventListener('mousemove', resize);

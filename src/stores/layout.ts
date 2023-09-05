@@ -21,13 +21,12 @@ export const useLayoutStore = create<LayoutState>()((set) => ({
         set((state) => ({
             leftSidebarOpen: !state.leftSidebarOpen,
         }));
-        // devLog('toggleLeftSidebar');
+        devLog('toggleLeftSidebar');
     },
     leftSidebarWidth: defaultSidebarWidth,
     setLeftSidebarWidth: (width) => {
-        console.log(width);
         set({ leftSidebarWidth: width });
-        // devLog('setLeftSidebarWidth');
+        devLog('setLeftSidebarWidth');
     },
     rightSidebarOpen: false,
     toggleRightSidebar: () => {
