@@ -155,7 +155,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
     };
 
     const addEdge = (edge: Edge) => {
-        takeSnapshot({ nodes, edges });
+        // takeSnapshot({ nodes, edges });
         addEdges([edge]);
     };
     const getEdge = (id: string) => edges.find((edge) => edge.id === id);
