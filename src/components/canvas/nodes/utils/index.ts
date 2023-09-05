@@ -49,8 +49,13 @@ export const getCenterNodeOnCoords = (
     const { width: defaultWidth, height: defaultHeight } =
         getDefaultNodeSize(nodeType);
 
-    return store.project({
-        x: position.x - reactFlowBounds.left - defaultWidth / 2,
-        y: position.y - reactFlowBounds.top - defaultHeight / 2,
+    const projectedPosition = store.project({
+        x: position.x - reactFlowBounds.left,
+        y: position.y - reactFlowBounds.top,
     });
+
+    return {
+        x: projectedPosition.x - defaultWidth / 2,
+        y: projectedPosition.y - defaultHeight / 2,
+    };
 };
