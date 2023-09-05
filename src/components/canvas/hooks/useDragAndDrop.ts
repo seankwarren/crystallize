@@ -52,6 +52,10 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
         store.setSelectedEdges([]);
         store.setSelectedNodes([]);
 
+        const blankCanvas = document.createElement('canvas');
+        document.body.appendChild(blankCanvas)
+        event.dataTransfer.setDragImage(blankCanvas, 0, 0);
+
         const position = getCenterNodeOnCoords(
             nodeType,
             { x: event.clientX, y: event.clientY },
