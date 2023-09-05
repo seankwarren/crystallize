@@ -1,4 +1,8 @@
-import { DragEvent, DragEventHandler, useCallback } from 'react';
+import {
+    DragEventHandler,
+    DragEvent as ReactDragEvent,
+    useCallback,
+} from 'react';
 import {
     NodeChange,
     NodeDragHandler,
@@ -48,7 +52,7 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
         });
     }, [takeSnapshot, store]);
 
-    const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
+    const onDragStart = (event: ReactDragEvent, nodeType: NodeTypes) => {
         store.setSelectedEdges([]);
         store.setSelectedNodes([]);
 
@@ -155,48 +159,58 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
     );
 
     // TODO: fix this
-    // const onDragEnd = useCallback(
-    //     (event: DragEvent) => {
-    //         if (!event.dataTransfer || !store.canvasRef.current) return;
-    //         if (event.dataTransfer.dropEffect !== 'none') return;
-    //         const type = event.dataTransfer.getData(
-    //             'application/reactflow'
-    //         ) as NodeTypes;
-    //         if (typeof type === 'undefined') {
-    //             return;
-    //         }
-    //         const reactFlowBounds =
-    //             store.canvasRef.current.getBoundingClientRect();
-    //         devLog(`type dropped: ${type}`);
-    //         const draggedNode = store.nodes.find(
-    //             (n) => n.id === 'dragging-card'
-    //         );
-    //         if (!draggedNode) {
-    //             console.warn("couldn't find dragged node");
-    //             return;
-    //         }
-    //         const position = store.project({
-    //             x: event.clientX - reactFlowBounds.left,
-    //             y: event.clientY - reactFlowBounds.top,
-    //         });
-    //         const newNode: CanvasNode<NodeData, NodeTypes> = {
-    //             id: `card-node-${uid()}`,
-    //             type,
-    //             position,
-    //             data: { label: `${type} node`, isResizable: true },
-    //             selected: false,
-    //         };
-    //         store.deleteElements([draggedNode], []);
-    //         takeSnapshot({
-    //             nodes: store.nodes,
-    //             edges: store.edges,
-    //         });
-    //         store.addNode(newNode);
-    //         store.setSelectedNodes([newNode]);
-    //         store.setSelectedEdges([]);
-    // },
-    //     [store, takeSnapshot]
-    // );
+    const onDragEnd = useCallback(
+        (event: DragEvent) => {
+            if (!store.canvasRef.current) return;
+
+            const draggedNode = store.nodes.find(
+                (n) => n.id === 'dragging-card'
+            );
+
+            if (!draggedNode) {
+                console.warn("couldn't find dragged node");
+                return;
+            }
+
+            const type = draggedNode.data.draggedType as NodeTypes | undefined;
+
+            if (!type) {
+                console.warn("couldn't find dragged type");
+                return;
+            }
+
+            const { width: defaultWidth, height: defaultHeight } =
+                getDefaultNodeSize(type);
+
+            const position = getCenterNodeOnCoords(
+                type,
+                { x: event.clientX, y: event.clientY },
+                store
+            );
+
+            const newNode = {
+                id: `card-node-${uid()}`,
+                type,
+                position,
+                style: {
+                    width: defaultWidth,
+                    height: defaultHeight,
+                },
+                data: { label: `${type} node`, isResizable: true },
+                selected: false,
+            };
+
+            takeSnapshot({
+                nodes: store.nodes.filter((node) => node.id !== draggedNode.id),
+                edges: store.edges,
+            });
+
+            store.deleteElements([draggedNode, introNode], []);
+            store.addNode(newNode);
+            store.setSelectedNodes([newNode]);
+        },
+        [store, takeSnapshot]
+    );
 
     return {
         onNodeDragStart,
@@ -206,7 +220,7 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
         onDragStart,
         onDrag,
         onDrop,
-        // onDragEnd,
+        onDragEnd,
     };
 };
 
