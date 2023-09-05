@@ -1,3 +1,4 @@
+import { defaultSidebarWidth } from '@components/layout/styles/styles';
 import { devLog } from '@utils/.';
 import { create } from 'zustand';
 
@@ -20,12 +21,13 @@ export const useLayoutStore = create<LayoutState>()((set) => ({
         set((state) => ({
             leftSidebarOpen: !state.leftSidebarOpen,
         }));
-        devLog('toggleLeftSidebar');
+        // devLog('toggleLeftSidebar');
     },
-    leftSidebarWidth: 200,
+    leftSidebarWidth: defaultSidebarWidth,
     setLeftSidebarWidth: (width) => {
+        console.log(width);
         set({ leftSidebarWidth: width });
-        devLog('setLeftSidebarWidth');
+        // devLog('setLeftSidebarWidth');
     },
     rightSidebarOpen: false,
     toggleRightSidebar: () => {
