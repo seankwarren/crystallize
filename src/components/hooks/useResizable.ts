@@ -1,3 +1,4 @@
+import { defaultSidebarWidth } from '@components/layout/styles/styles';
 import { RefObject, useCallback, useEffect, useState } from 'react';
 
 type Props = {
@@ -5,7 +6,7 @@ type Props = {
     minWidth?: number;
     maxWidth?: number;
     handleSaveWidth: (width: number) => void;
-    toggleSidebar?: () => void;
+    toggleSidebar: () => void;
     anchorSide: 'left' | 'right';
     sidebarRef: RefObject<HTMLDivElement>;
 };
@@ -13,8 +14,8 @@ const useResizable = ({
     initialWidth = 200,
     minWidth = 150,
     maxWidth = 300,
-    handleSaveWidth,
     toggleSidebar,
+    handleSaveWidth,
     anchorSide = 'left',
     sidebarRef,
 }: Props) => {
@@ -24,10 +25,6 @@ const useResizable = ({
 
     const startResizing = useCallback(() => {
         setIsResizing(true);
-    }, []);
-
-    const stopResizing = useCallback(() => {
-        setIsResizing(false);
     }, []);
 
     const resize = useCallback(
@@ -47,12 +44,21 @@ const useResizable = ({
                     setSidebarWidth(newWidth);
                 }
                 if (newWidth <= closeThreshold) {
-                    toggleSidebar && toggleSidebar();
+                    setSidebarWidth(0);
                 }
             }
         },
-        [anchorSide, maxWidth, minWidth, sidebarRef, toggleSidebar, isResizing]
+        [anchorSide, maxWidth, minWidth, sidebarRef, isResizing]
     );
+
+    const stopResizing = useCallback(() => {
+        setIsResizing(false);
+        console.log('stop resizing', sidebarWidth, initialWidth);
+        if (sidebarWidth === 0) {
+            toggleSidebar();
+            handleSaveWidth(defaultSidebarWidth);
+        }
+    }, [sidebarWidth, toggleSidebar, handleSaveWidth, initialWidth]);
 
     useEffect(() => {
         window.addEventListener('mousemove', resize);
@@ -67,7 +73,7 @@ const useResizable = ({
         handleSaveWidth(sidebarWidth);
     }, [sidebarWidth, handleSaveWidth]);
 
-    return { sidebarWidth, startResizing };
+    return { sidebarWidth, startResizing, isResizing };
 };
 
 export default useResizable;
