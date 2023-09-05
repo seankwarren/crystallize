@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Handle, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
-import { defaultNodeHeight, defaultNodeWidth } from '../styles/styles';
+import { maxNodeSize, minNodeSize } from '../styles/styles';
 import { ColorType, NodeData } from '../types';
 import './styles/CardNode.css';
 
@@ -17,7 +17,7 @@ const handleStyle = {
 
 const CardNode = ({ id, selected, data }: Props) => {
 
-    const { color, isResizable = false } = data;
+    const { color, isResizable } = data;
 
     const boxShadow = useCallback((color: ColorType | undefined): string => {
         if (!color && !selected) {
@@ -35,8 +35,12 @@ const CardNode = ({ id, selected, data }: Props) => {
         return ''
     }, [selected])
 
+    const shouldResize = () => !!isResizable
     return (
-        <div id={id} className={`card-node ${selected && 'selected'} nowheel`} style={{ boxShadow: boxShadow(color) }}>
+        <div
+            id={id}
+            className={`card-node ${selected && 'selected'} nowheel`}
+            style={{ boxShadow: boxShadow(color) }}>
 
             <div className={`card-node-backdrop ${selected && 'selected'}`} style={{ backgroundColor: color }}></div>
 
@@ -44,105 +48,121 @@ const CardNode = ({ id, selected, data }: Props) => {
             <NodeResizeControl
                 position='top'
                 variant={ResizeControlVariant.Line}
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(calc(var(--md-spacing) / 2), -75%)',
                     width: 'calc(100% - var(--md-spacing))',
                     height: 'var(--sm-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
             </NodeResizeControl>
             <NodeResizeControl
                 position='right'
                 variant={ResizeControlVariant.Line}
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-25%, calc(var(--md-spacing) / 2))',
                     width: 'var(--sm-spacing)',
                     height: 'calc(100% - var(--md-spacing))',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
             </NodeResizeControl>
             <NodeResizeControl
                 position='bottom'
                 variant={ResizeControlVariant.Line}
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(calc(var(--md-spacing) / 2), -25%)',
                     width: 'calc(100% - var(--md-spacing))',
                     height: 'var(--sm-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
             </NodeResizeControl>
             <NodeResizeControl
                 position='left'
                 variant={ResizeControlVariant.Line}
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-75%, calc(var(--md-spacing) / 2))',
                     width: 'var(--sm-spacing)',
                     height: 'calc(100% - var(--md-spacing))',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
             </NodeResizeControl>
             <NodeResizeControl
                 position='top-left'
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
                 {/* <div className="resize-handle top-left-handle" /> */}
             </NodeResizeControl>
             <NodeResizeControl
                 position='top-right'
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
                 <div className="resize-handle top-right-handle" />
             </NodeResizeControl>
             <NodeResizeControl
                 position='bottom-right'
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
                 <div className="resize-handle bottom-right-handle" />
             </NodeResizeControl>
             <NodeResizeControl
                 position='bottom-left'
-                shouldResize={() => isResizable}
+                shouldResize={shouldResize}
                 style={{
                     ...handleStyle,
                     transform: 'translate(-50%, -50%)',
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}>
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
+                maxWidth={maxNodeSize}
+                maxHeight={maxNodeSize}>
                 <div className="resize-handle bottom-left-handle" />
             </NodeResizeControl>
 

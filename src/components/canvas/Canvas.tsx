@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ReactFlow, {
     Background,
     ConnectionMode,
@@ -49,20 +49,17 @@ const Canvas = () => {
         onConnect,
         snapToGrid,
         isInteractive,
-        zoomTo,
-        fitView,
-        setCenter,
     } = store;
-
 
     const {
         onNodeDragStart,
         onSelectionDragStart,
         onNodesDelete,
         onEdgesDelete,
+        onDragStart,
         onDrag,
         onDrop,
-        onDragEnd,
+        // onDragEnd,
     } = useDragAndDrop({ store, takeSnapshot });
 
     useOnSelectionChange({
@@ -72,18 +69,17 @@ const Canvas = () => {
         }
     });
 
-
     const onInit = (() => {
         setNodes([introNode]);
         setEdges([]);
     })
 
-    useEffect(() => {
-        document.addEventListener('dragend', onDragEnd);
-        return () => {
-            document.removeEventListener('dragend', onDragEnd);
-        };
-    }, [onDragEnd]);
+    // useEffect(() => {
+    //     document.addEventListener('dragend', onDragEnd);
+    //     return () => {
+    //         document.removeEventListener('dragend', onDragEnd);
+    //     };
+    // }, [onDragEnd]);
 
     return (
         <div className="canvas-container" ref={canvasRef}>
@@ -133,7 +129,7 @@ const Canvas = () => {
                         redo={redo}
                         canUndo={canUndo}
                         canRedo={canRedo} />
-                    <CanvasNodeMenu store={store} />
+                    <CanvasNodeMenu onDragStart={onDragStart} />
                     <CanvasToolbar store={store} />
                     <HelperLines horizontal={helperLineHorizontal} vertical={helperLineVertical} />
                 </ReactFlow>

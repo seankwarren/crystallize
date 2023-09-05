@@ -1,6 +1,8 @@
 import { Node } from 'reactflow';
+import { NodeTypes } from '.';
+import { NodeData } from '../types';
 
-export const draggingCardNode: Node = {
+export const draggingCardNode: Node<NodeData, NodeTypes> = {
     id: 'dragging-card',
     type: 'dragging',
     data: {},
@@ -9,7 +11,7 @@ export const draggingCardNode: Node = {
     position: { x: 0, y: 0 },
 };
 
-export const introNode: Node = {
+export const introNode: Node<NodeData, NodeTypes> = {
     id: 'intro',
     type: 'intro',
     data: {

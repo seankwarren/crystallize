@@ -1,3 +1,4 @@
+import { NodeData } from '../types';
 import './styles/IntroNode.css';
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 const IntroNode = ({ id, data }: Props) => {
 
     const { label } = data;
+
     return (
         <div id={id} className="intro-node">
             {label}

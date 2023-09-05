@@ -13,6 +13,7 @@ import {
     getConnectedEdges,
     useReactFlow,
 } from 'reactflow';
+import { NodeTypes } from '../nodes';
 import { ZOOM_DURATION } from '../styles/styles';
 import { ColorType, EdgeData, NodeData } from '../types';
 import { HistoryItem } from './useUndoRedo';
@@ -22,7 +23,7 @@ import { HistoryItem } from './useUndoRedo';
  */
 
 export type CanvasState = {
-    nodes: Node<NodeData>[];
+    nodes: Node<NodeData, NodeTypes>[];
     edges: Edge<EdgeData>[];
     snapToGrid: boolean;
     snapToObjects: boolean;
@@ -34,14 +35,14 @@ export type CanvasStore = CanvasState & {
     // reactFlowInstance: ReactFlowInstance<NodeData, EdgeData>;
     canvasRef: RefObject<HTMLDivElement>;
 
-    setNodes: React.Dispatch<React.SetStateAction<Node<NodeData>[]>>;
-    getNode: (id: string) => Node<NodeData> | undefined;
-    addNode: (node: Node<NodeData>) => void;
-    addNodes: (nodes: Node<NodeData>[]) => void;
+    setNodes: React.Dispatch<React.SetStateAction<Node<NodeData, NodeTypes>[]>>;
+    getNode: (id: string) => Node<NodeData, NodeTypes> | undefined;
+    addNode: (node: Node<NodeData, NodeTypes>) => void;
+    addNodes: (nodes: Node<NodeData, NodeTypes>[]) => void;
     onNodesChange: (changes: NodeChange[]) => void;
     updateNode: (nodeId: string, changes: NodeChange[]) => void;
-    getSelectedNodes: () => Node<NodeData>[];
-    setSelectedNodes: (selectedNodes: Node<NodeData>[]) => void;
+    getSelectedNodes: () => Node<NodeData, NodeTypes>[];
+    setSelectedNodes: (selectedNodes: Node[]) => void;
 
     setEdges: React.Dispatch<React.SetStateAction<Edge<EdgeData>[]>>;
     getEdge: (id: string) => Edge<EdgeData> | undefined;
@@ -55,7 +56,7 @@ export type CanvasStore = CanvasState & {
     deleteElements: (nodes: Node[], edges: Edge[]) => void;
     onConnect: (params: Edge | Connection) => void;
 
-    fitViewToSelection: (nodes?: Node[]) => void;
+    fitViewToSelection: (nodes?: Node<NodeData, NodeTypes>[]) => void;
 
     toggleSnapToGrid: () => void;
     toggleSnapToObjects: () => void;
@@ -64,7 +65,7 @@ export type CanvasStore = CanvasState & {
     setColorSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setColors: (
         color: ColorType,
-        selectedNodes: Node[],
+        selectedNodes: Node<NodeData, NodeTypes>[],
         selectedEdges: Edge[]
     ) => void;
 } & ViewportHelperFunctions;
@@ -94,21 +95,24 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
 
     const reactFlowInstance = useReactFlow<NodeData, EdgeData>();
     const canvasRef = useRef<HTMLDivElement>(null);
-    const [nodes, setNodes] = useState<Node<NodeData>[]>(initialState.nodes);
+    const [nodes, setNodes] = useState<Node<NodeData, NodeTypes>[]>(
+        initialState.nodes
+    );
     const [edges, setEdges] = useState<Edge<EdgeData>[]>(initialState.edges);
 
-    const addNodes = (nodes: Node<NodeData>[]) => {
+    const addNodes = (nodes: Node<NodeData, NodeTypes>[]) => {
         setNodes((prev) => [...prev, ...nodes]);
     };
 
-    const addNode = (node: Node) => {
+    const addNode = (node: Node<NodeData, NodeTypes>) => {
         // takeSnapshot(canvasState);
         addNodes([node]);
     };
 
-    const getNode = (id: string) => nodes.find((node) => node.id === id);
+    const getNode = (id: string): Node<NodeData, NodeTypes> | undefined =>
+        nodes.find((node) => node.id === id);
 
-    const updateNode = (nodeId: string, changes: NodeChange[]) => {
+    const updateNode = (nodeId: string, changes: NodeChange[]): void => {
         const originalNode = getNode(nodeId);
         if (!originalNode) {
             console.error(`Node with id ${nodeId} not found`);
@@ -120,7 +124,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         });
     };
 
-    const onNodesChange = (changes: NodeChange[]) => {
+    const onNodesChange = (changes: NodeChange[]): void => {
         setNodes((nodes) => {
             const changedNodes = applyNodeChanges(changes, nodes);
             const updatedNodes = nodes.map((node) => {
@@ -130,13 +134,14 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
                 if (changedNode) return changedNode;
                 return node;
             });
-            return updatedNodes;
+            return updatedNodes as Node<NodeData, NodeTypes>[];
         });
     };
 
-    const getSelectedNodes = () => nodes.filter((node) => node.selected);
+    const getSelectedNodes = (): Node<NodeData, NodeTypes>[] =>
+        nodes.filter((node) => node.selected);
 
-    const setSelectedNodes = (selectedNodes: Node[]) => {
+    const setSelectedNodes = (selectedNodes: Node[]): void => {
         const selectedNodeIds = new Set(selectedNodes.map((n) => n.id));
         setNodes((nodes) => {
             return nodes.map((node) => {
@@ -199,7 +204,10 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         });
     };
 
-    const fitViewToSelection = (nodes: Node[] = [], edges: Edge[] = []) => {
+    const fitViewToSelection = (
+        nodes: Node<NodeData, NodeTypes>[] = [],
+        edges: Edge[] = []
+    ) => {
         if (nodes.length === 0 && edges.length === 0) {
             reactFlowInstance.fitView({
                 duration: ZOOM_DURATION,
@@ -290,7 +298,7 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
 
     const setColors = (
         color: ColorType,
-        selectedNodes: Node[],
+        selectedNodes: Node<NodeData, NodeTypes>[],
         selectedEdges: Edge[]
     ): void => {
         if (selectedNodes.length === 0 && selectedEdges.length === 0) return;

@@ -54,13 +54,13 @@ export type ColorType =
     | '';
 
 export interface NodeData {
-    color: ColorType;
+    color?: ColorType;
     label?: string | JSX.Element;
-    isResizable: boolean;
-    draggedType: NodeTypes;
+    isResizable?: boolean;
+    draggedType?: NodeTypes;
 }
 
 export interface EdgeData {
-    color: string;
+    color?: string;
     label?: string;
 }

@@ -1,4 +1,4 @@
-.card-node {
+.note-node {
     display: flex;
     background-color: var(--dark-bg-color);
     border-radius: var(--md-border-radius);
@@ -12,7 +12,7 @@
     position: absolute;
 }
 
-.card-node-backdrop {
+.note-node-backdrop {
     width: 100%;
     opacity: 0.3;
     filter: brightness(15%);
@@ -20,11 +20,11 @@
     z-index: 0;
 }
 
-.card-node-backdrop.selected {
+.note-node-backdrop.selected {
     opacity: 1;
 }
 
-.card-node-content {
+.note-node-content {
     z-index: 1;
     position: absolute;
     background-color: transparent;
@@ -36,11 +36,11 @@
     overflow-x: hidden;
 }
 
-.card-node-content::-webkit-scrollbar {
+.note-node-content::-webkit-scrollbar {
     scrollbar-color: white transparent;
 }
 
-.card-node-content > p {
+.note-node-content > p {
     margin: 0;
     padding: 0;
 }
