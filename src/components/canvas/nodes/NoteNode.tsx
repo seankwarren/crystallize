@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { Handle, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
-import { defaultNodeHeight, defaultNodeWidth, maxNodeSize } from '../styles/styles';
+import { maxNodeSize, minNodeSize } from '../styles/styles';
 import { ColorType, NodeData } from '../types';
 import './styles/NoteNode.css';
 
@@ -55,8 +55,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'calc(100% - var(--md-spacing))',
                     height: 'var(--sm-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
             </NodeResizeControl>
@@ -70,8 +70,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'var(--sm-spacing)',
                     height: 'calc(100% - var(--md-spacing))',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
             </NodeResizeControl>
@@ -85,8 +85,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'calc(100% - var(--md-spacing))',
                     height: 'var(--sm-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
             </NodeResizeControl>
@@ -100,8 +100,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'var(--sm-spacing)',
                     height: 'calc(100% - var(--md-spacing))',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
             </NodeResizeControl>
@@ -114,8 +114,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
                 {/* <div className="resize-handle top-left-handle" /> */}
@@ -129,8 +129,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
                 <div className="resize-handle top-right-handle" />
@@ -144,8 +144,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
                 <div className="resize-handle bottom-right-handle" />
@@ -159,8 +159,8 @@ const NoteNode = ({ id, selected, data }: Props) => {
                     width: 'var(--md-spacing)',
                     height: 'var(--md-spacing)',
                 }}
-                minWidth={defaultNodeWidth}
-                minHeight={defaultNodeHeight}
+                minWidth={minNodeSize}
+                minHeight={minNodeSize}
                 maxWidth={maxNodeSize}
                 maxHeight={maxNodeSize}>
                 <div className="resize-handle bottom-left-handle" />
