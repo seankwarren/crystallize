@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { CanvasStore } from '../hooks/types';
-import { ColorType, EdgeData, NodeData } from '../types';
+import { ColorType } from '../types';
 import { getSelectedEdges, getSelectedNodes } from '../utils';
 import './styles/ColorPicker.css';
 
@@ -52,8 +52,8 @@ const ColorPicker = ({ store, open = false }: Props) => {
     }, [store]);
 
     const checkSelectedColors = () => {
-        const nodeColors = getSelectedNodes(store.nodes).map(node => (node.data as NodeData).color || undefined);
-        const edgeColors = getSelectedEdges(store.edges).map(edge => (edge.data as EdgeData).color);
+        const nodeColors = getSelectedNodes(store.nodes).map(node => (node.data).color || undefined);
+        const edgeColors = getSelectedEdges(store.edges).map(edge => edge.data?.color);
         const allColors = [...nodeColors, ...edgeColors];
         return allColors.length > 0 && allColors.every(color => color === allColors[0]) ? allColors[0] : null;
     };

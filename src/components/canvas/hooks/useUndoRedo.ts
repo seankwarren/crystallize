@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Edge, Node } from 'reactflow';
-import { CanvasStore } from './useCanvasState';
+import { CanvasStore } from './types';
 
 type UseUndoRedoOptions = {
     maxHistorySize?: number;

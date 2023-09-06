@@ -1,9 +1,9 @@
-import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
 import { canvasMenuWidth, controlIconSize } from '@components/canvas/styles/styles';
 import Icon from '@components/generic/Icon';
 import { Panel } from '@reactflow/core';
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { PanelPosition } from 'reactflow';
+import { CanvasStore } from '../hooks/types';
 import CanvasOptions from './CanvasOptions';
 import ControlButton from './ControlButton';
 import './styles/CanvasControls.css';
