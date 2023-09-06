@@ -27,7 +27,7 @@ const Content = () => {
                     toggleSidebar={toggleLeftSidebar} />}
             <div id="main-window-container">
                 <CanvasWithProvider />
-                <CanvasWithProvider />
+                {/* <CanvasWithProvider /> */}
             </div>
             {rightSidebarOpen &&
                 <Sidebar

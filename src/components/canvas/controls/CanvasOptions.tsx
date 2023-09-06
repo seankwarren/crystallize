@@ -1,7 +1,6 @@
 import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
-import { canvasOptionMenuIconSize } from '@components/canvas/styles/styles';
-import Icon, { IconName } from '@components/generic/Icon';
-import { CSSProperties } from 'react';
+import PopupMenu, { MenuItemConfig } from '@components/generic/PopupMenu';
+import { CSSProperties, useCallback, useMemo } from 'react';
 import './styles/CanvasOptions.css';
 type Props = {
     closeMenu: () => void;
@@ -9,11 +8,6 @@ type Props = {
     store: CanvasStore;
 }
 
-const OptionIcon = (name: IconName, className: string = '') => {
-    return (
-        <Icon name={name} size={canvasOptionMenuIconSize} className={`menu-item-icon ${className}`} />
-    )
-}
 const CanvasOptions = ({ closeMenu, style, store }: Props) => {
 
     const {
@@ -25,49 +19,47 @@ const CanvasOptions = ({ closeMenu, style, store }: Props) => {
         toggleIsInteractive
     } = store;
 
-    const handleToggleSnapToGrid = () => {
+    const handleToggleSnapToGrid = useCallback(() => {
         toggleSnapToGrid();
         closeMenu();
-    }
-    const handleToggleSnapToObjects = () => {
+    }, [toggleSnapToGrid, closeMenu])
+
+    const handleToggleSnapToObjects = useCallback(() => {
         toggleSnapToObjects();
         closeMenu();
-    }
-    const handleToggleIsInteractive = () => {
+    }, [toggleSnapToObjects, closeMenu])
+
+    const handleToggleIsInteractive = useCallback(() => {
         toggleIsInteractive();
         closeMenu();
-    }
+    }, [toggleIsInteractive, closeMenu])
+
+    const config: MenuItemConfig[] = useMemo(() => [
+        {
+            title: 'Snap to grid',
+            iconName: 'Grid3x3',
+            value: snapToGrid,
+            showCheck: true,
+            onClick: handleToggleSnapToGrid,
+        },
+        {
+            title: 'Snap to objects',
+            iconName: 'GitPullRequestDraft',
+            value: snapToObjects,
+            showCheck: true,
+            onClick: handleToggleSnapToObjects,
+        },
+        {
+            title: 'Read-only',
+            iconName: 'Lock',
+            value: !isInteractive,
+            showCheck: false,
+            onClick: handleToggleIsInteractive,
+        },
+    ], [handleToggleSnapToGrid, handleToggleSnapToObjects, handleToggleIsInteractive, snapToGrid, snapToObjects, isInteractive])
 
     return (
-        <div className="canvas-options-menu" style={style}>
-            <div
-                className="menu-item"
-                onClick={handleToggleSnapToGrid}>
-                <div className='menu-item-label'>
-                    {OptionIcon('Grid3x3')}
-                    <span>Snap to grid</span>
-                </div>
-                {snapToGrid ? OptionIcon('Check', 'check') : OptionIcon('Blank')}
-            </div>
-            <div
-                className="menu-item"
-                onClick={handleToggleSnapToObjects}>
-                <div className='menu-item-label'>
-                    {OptionIcon('GitPullRequestDraft')}
-                    <span>Snap to objects</span>
-                </div>
-                {snapToObjects ? OptionIcon('Check', 'check') : OptionIcon('Blank')}
-            </div>
-            <div
-                className="menu-item"
-                onClick={handleToggleIsInteractive}>
-                <div className='menu-item-label'>
-                    {OptionIcon('Lock')}
-                    <span>Read-only</span>
-                </div>
-                {!isInteractive ? OptionIcon('Check', 'check') : OptionIcon('Blank')}
-            </div>
-        </div >
+        <PopupMenu config={config} showIcons={true} style={style} />
     )
 }
 

@@ -11,6 +11,8 @@ import {
     applyEdgeChanges,
     applyNodeChanges,
     getConnectedEdges,
+    getRectOfNodes,
+    // getRectOfNodes,
     useReactFlow,
 } from 'reactflow';
 import { NodeTypes } from '../nodes';
@@ -29,10 +31,11 @@ export type CanvasState = {
     snapToObjects: boolean;
     isInteractive: boolean;
     colorSelectorOpen: boolean;
+    alignNodesMenuOpen: boolean;
+    alignNodesMenuPosition: { top: number; left: number };
 };
 
 export type CanvasStore = CanvasState & {
-    // reactFlowInstance: ReactFlowInstance<NodeData, EdgeData>;
     canvasRef: RefObject<HTMLDivElement>;
 
     setNodes: React.Dispatch<React.SetStateAction<Node<NodeData, NodeTypes>[]>>;
@@ -43,6 +46,8 @@ export type CanvasStore = CanvasState & {
     updateNode: (nodeId: string, changes: NodeChange[]) => void;
     getSelectedNodes: () => Node<NodeData, NodeTypes>[];
     setSelectedNodes: (selectedNodes: Node[]) => void;
+    alignNodesVertical: (direction: 'left' | 'right' | 'center') => void;
+    alignNodesHorizontal: (direction: 'top' | 'bottom' | 'middle') => void;
 
     setEdges: React.Dispatch<React.SetStateAction<Edge<EdgeData>[]>>;
     getEdge: (id: string) => Edge<EdgeData> | undefined;
@@ -68,11 +73,17 @@ export type CanvasStore = CanvasState & {
         selectedNodes: Node<NodeData, NodeTypes>[],
         selectedEdges: Edge[]
     ) => void;
+
+    setAlignNodesMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setAlignNodesMenuPosition: React.Dispatch<
+        React.SetStateAction<{ top: number; left: number }>
+    >;
 } & ViewportHelperFunctions;
 
 type Props = {
     initialState?: CanvasState;
     takeSnapshot: (state: HistoryItem) => void;
+    // rfStore: ReactFlowState;
 };
 
 /**
@@ -80,18 +91,28 @@ type Props = {
  *
  * @param props.initialState - The initial state of the canvas.
  * @param props.takeSnapshot - A function to take a snapshot of the canvas state.
+ * @param props.rfStore - The react-flow store.
  *
  * @returns The current canvas state along with various functions to manipulate it.
  */
-const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
-    initialState = {
+const useCanvasState = ({
+    initialState,
+    takeSnapshot,
+}: // rfStore,
+Props): CanvasStore => {
+    initialState = initialState || {
         nodes: [],
         edges: [],
         snapToGrid: true,
         snapToObjects: false,
         isInteractive: true,
         colorSelectorOpen: false,
+        alignNodesMenuOpen: false,
+        alignNodesMenuPosition: { top: 0, left: 0 },
     };
+
+    // TODO: pull this out into our own store
+    // const { transform } = rfStore;
 
     const reactFlowInstance = useReactFlow<NodeData, EdgeData>();
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -99,6 +120,10 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         initialState.nodes
     );
     const [edges, setEdges] = useState<Edge<EdgeData>[]>(initialState.edges);
+    const [alignNodesMenuPosition, setAlignNodesMenuPosition] = useState<{
+        top: number;
+        left: number;
+    }>({ top: 0, left: 0 });
 
     const addNodes = (nodes: Node<NodeData, NodeTypes>[]) => {
         setNodes((prev) => [...prev, ...nodes]);
@@ -146,6 +171,94 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         setNodes((nodes) => {
             return nodes.map((node) => {
                 return { ...node, selected: selectedNodeIds.has(node.id) };
+            });
+        });
+    };
+
+    const alignNodesVertical = (direction: 'left' | 'right' | 'center') => {
+        const selectedNodes = getSelectedNodes();
+        if (selectedNodes.length === 0) return;
+
+        setNodes((nodes) => {
+            const boundingBox = getRectOfNodes(selectedNodes);
+
+            return nodes.map((node) => {
+                if (!node.selected) return node;
+
+                let newPosX;
+
+                switch (direction) {
+                    case 'left':
+                        newPosX = boundingBox.x;
+                        break;
+                    case 'right':
+                        newPosX =
+                            boundingBox.x +
+                            boundingBox.width -
+                            (node.width || 0);
+                        break;
+                    case 'center':
+                        newPosX =
+                            boundingBox.x +
+                            boundingBox.width / 2 -
+                            (node.width || 0) / 2;
+                        break;
+                    default:
+                        console.error('Invalid direction');
+                        return node;
+                }
+
+                return {
+                    ...node,
+                    position: {
+                        x: newPosX,
+                        y: node.position.y,
+                    },
+                };
+            });
+        });
+    };
+
+    const alignNodesHorizontal = (direction: 'top' | 'bottom' | 'middle') => {
+        const selectedNodes = getSelectedNodes();
+        if (selectedNodes.length === 0) return;
+
+        setNodes((nodes) => {
+            const boundingBox = getRectOfNodes(selectedNodes);
+
+            return nodes.map((node) => {
+                if (!node.selected) return node;
+
+                let newPosY;
+
+                switch (direction) {
+                    case 'top':
+                        newPosY = boundingBox.y;
+                        break;
+                    case 'bottom':
+                        newPosY =
+                            boundingBox.y +
+                            boundingBox.height -
+                            (node.height || 0);
+                        break;
+                    case 'middle':
+                        newPosY =
+                            boundingBox.y +
+                            boundingBox.height / 2 -
+                            (node.height || 0) / 2;
+                        break;
+                    default:
+                        console.error('Invalid direction');
+                        return node;
+                }
+
+                return {
+                    ...node,
+                    position: {
+                        x: node.position.x,
+                        y: newPosY,
+                    },
+                };
             });
         });
     };
@@ -333,6 +446,10 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         });
     };
 
+    const [alignNodesMenuOpen, setAlignNodesMenuOpen] = useState<boolean>(
+        initialState.alignNodesMenuOpen
+    );
+
     return {
         ...reactFlowInstance,
         canvasRef,
@@ -346,6 +463,8 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         onNodesChange,
         getSelectedNodes,
         setSelectedNodes,
+        alignNodesVertical,
+        alignNodesHorizontal,
 
         edges,
         getEdge,
@@ -372,6 +491,10 @@ const useCanvasState = ({ initialState, takeSnapshot }: Props): CanvasStore => {
         setColors,
         colorSelectorOpen,
         setColorSelectorOpen,
+        alignNodesMenuOpen,
+        setAlignNodesMenuOpen,
+        alignNodesMenuPosition,
+        setAlignNodesMenuPosition,
     };
 };
 

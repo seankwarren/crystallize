@@ -1,10 +1,11 @@
+import { MouseEvent } from 'react';
 import { IconName } from '../generic/Icon';
 import { EdgeTypes } from './edges';
 import { CanvasStore } from './hooks/useCanvasState';
 import { NodeTypes } from './nodes/nodeTypes';
 
-type ActionFunction =
-    | ((state: CanvasStore) => void);
+export type ActionFunction =
+    | ((store: CanvasStore, e: MouseEvent) => void);
 
 export type ActionType = {
     /** Tooltip text for the action. */
@@ -41,7 +42,7 @@ export type ActionType = {
     /**
      * Specifies if the element should propate click events to the canvas.
      */
-    preventClickPropagation: boolean;
+    allowClickPropagation: boolean;
 };
 
 export type ActionsListType = {

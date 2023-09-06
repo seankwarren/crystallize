@@ -35,6 +35,8 @@ const Canvas = () => {
         snapToObjects: false,
         isInteractive: true,
         colorSelectorOpen: false,
+        alignNodesMenuOpen: false,
+        alignNodesMenuPosition: { top: 0, left: 0 },
     }
     const store = useCanvasState({ initialState, takeSnapshot });
 

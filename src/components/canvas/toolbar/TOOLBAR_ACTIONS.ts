@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { devLog } from '@utils/.';
 // import { getRectOfNodes } from 'src/utils/utils';
+import { MouseEvent } from 'react';
 import { CanvasStore } from '../hooks/useCanvasState';
 import { ActionsListType } from '../types';
 
@@ -29,8 +30,16 @@ const editLabel = (_store: CanvasStore) => {
 const createGroup = (_store: CanvasStore) => {
     devLog('creating group');
 };
-const alignNodes = (_store: CanvasStore) => {
-    devLog('aligning children');
+const openAlignNodesMenu = (store: CanvasStore, e: MouseEvent) => {
+    const { clientX, clientY } = e;
+    store.setAlignNodesMenuOpen(true);
+    // TODO: fix this positioning
+    const menuPostition = store.project({ x: clientX, y: clientY });
+    const { x, y, zoom } = store.getViewport();
+    store.setAlignNodesMenuPosition({
+        top: menuPostition.y * zoom,
+        left: menuPostition.x * zoom,
+    });
 };
 const setBackground = (_store: CanvasStore) => {
     devLog('setting background');
@@ -48,7 +57,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: false,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     setColor: {
         title: 'Set color',
@@ -61,7 +70,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
-        preventClickPropagation: false,
+        allowClickPropagation: false,
     },
     zoomToSelection: {
         title: 'Zoom to selection',
@@ -74,7 +83,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: false,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     editLineDirection: {
         title: 'Line direction',
@@ -87,12 +96,14 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     alignChildren: {
         title: 'Align',
         icon: 'AlignStartVertical',
-        onClick: alignNodes,
+        onClick: (store, e) => {
+            openAlignNodesMenu(store, e);
+        },
         allowedNodeTypes: ['group'],
         allowedEdgeTypes: [],
         isEditAction: true,
@@ -100,12 +111,14 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     alignSelection: {
         title: 'Align',
         icon: 'AlignStartVertical',
-        onClick: alignNodes,
+        onClick: (store, e) => {
+            openAlignNodesMenu(store, e);
+        },
         allowedNodeTypes: ['note', 'card', 'image', 'group'],
         allowedEdgeTypes: [],
         isEditAction: true,
@@ -113,7 +126,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: true,
         requiresSingleType: false,
-        preventClickPropagation: true,
+        allowClickPropagation: false,
     },
     createGroup: {
         title: 'Create group',
@@ -126,7 +139,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: true,
         requiresSingleType: false,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     editNode: {
         title: 'Edit',
@@ -139,7 +152,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     editLabel: {
         title: 'Edit label',
@@ -152,7 +165,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
     setBackground: {
         title: 'Set background',
@@ -165,6 +178,6 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
         allowsMultiSelection: true,
         requiresMultiSelection: false,
         requiresSingleType: true,
-        preventClickPropagation: true,
+        allowClickPropagation: true,
     },
 };
