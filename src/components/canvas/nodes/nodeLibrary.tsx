@@ -41,9 +41,8 @@ export const selectionNode: Node<NodeData, NodeTypes> = {
     id: 'selection',
     type: 'selection',
     position: { x: 0, y: 0 },
-    hidden: true,
     selectable: false,
     connectable: false,
-    draggable: false,
+    draggable: true,
     data: {},
 }

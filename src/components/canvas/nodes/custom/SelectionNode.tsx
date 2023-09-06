@@ -1,7 +1,7 @@
 import { NodeProps, useStore } from 'reactflow';
 import '../styles/SelectionNode.css';
 
-const boxShadow = '0px 0px 0px calc(var(--xl-border-width)) var(--intro-node-color)'
+const boxShadow = '0px 0px 0px var(--md-spacing) var(--selection-node-color)'
 
 const SelectionNode = ({ id, selected }: NodeProps) => {
 
@@ -14,7 +14,7 @@ const SelectionNode = ({ id, selected }: NodeProps) => {
             height: node.height,
         };
     });
-
+    console.log(size)
     return (
         <div
             id={id}

@@ -35,7 +35,7 @@ export type CanvasStore = CanvasState & {
     addNodes: (nodes: Node<NodeData, NodeTypes>[]) => void;
     onNodesChange: (changes: NodeChange[]) => void;
     updateNode: (nodeId: string, changes: NodeChange[]) => void;
-    getSelectedNodes: () => Node<NodeData, NodeTypes>[];
+    // getSelectedNodes: (nodes: Node[]) => Node[];
     setSelectedNodes: (selectedNodes: Node[]) => void;
     alignNodesVertical: (direction: 'left' | 'right' | 'center') => void;
     alignNodesHorizontal: (direction: 'top' | 'bottom' | 'middle') => void;
@@ -46,7 +46,7 @@ export type CanvasStore = CanvasState & {
     addEdges: (edges: Edge<EdgeData>[]) => void;
     onEdgesChange: (changes: EdgeChange[]) => void;
     updateEdge: (edgeId: string, changes: EdgeChange[]) => void;
-    getSelectedEdges: () => Edge[];
+    // getSelectedEdges: (edges: Edge[]) => Edge[];
     setSelectedEdges: (selectedEdges: Edge[]) => void;
 
     deleteElements: (nodes: Node[], edges: Edge[]) => void;

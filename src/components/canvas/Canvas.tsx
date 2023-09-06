@@ -3,7 +3,6 @@ import ReactFlow, {
     Background,
     ConnectionMode,
     SelectionMode,
-    getRectOfNodes,
     useOnSelectionChange
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -16,6 +15,7 @@ import HelperLines from './overlays/CanvasHelperLines';
 import './styles/Canvas.css';
 import { snapGridInterval } from './styles/styles';
 import { CanvasToolbar } from './toolbar';
+import { drawSelectionHighlight } from './utils';
 
 const Canvas = () => {
 
@@ -44,9 +44,9 @@ const Canvas = () => {
 
     const {
         canvasRef,
-        nodes,
+        // nodes,
         setNodes,
-        addNodes,
+        // addNodes,
         setSelectedNodes,
         setEdges,
         setSelectedEdges,
@@ -60,6 +60,7 @@ const Canvas = () => {
 
     const {
         onNodeDragStart,
+        onNodeDrag,
         onSelectionDragStart,
         onNodesDelete,
         onEdgesDelete,
@@ -74,17 +75,7 @@ const Canvas = () => {
             setSelectedNodes(selectedNodes);
             setSelectedEdges(edges);
             deleteElements([selectionNode], []);
-            if (selectedNodes.length > 1) {
-                const { x, y, width, height } = getRectOfNodes(selectedNodes);
-                addNodes([{
-                    ...selectionNode,
-                    position: { x: x - 10, y: y - 10 },
-                    hidden: false,
-                    width: width + 20,
-                    height: height + 20,
-                }]);
-                console.log(nodes.map((n => n.id)))
-            }
+            if (selectedNodes.length > 0) drawSelectionHighlight(store);
         }
     });
 
@@ -120,6 +111,7 @@ const Canvas = () => {
                     nodesDraggable={isInteractive}
                     nodesConnectable={isInteractive}
                     onNodeDragStart={onNodeDragStart}
+                    onNodeDrag={onNodeDrag}
                     onSelectionDragStart={onSelectionDragStart}
                     onNodesDelete={onNodesDelete}
                     onEdgesDelete={onEdgesDelete}

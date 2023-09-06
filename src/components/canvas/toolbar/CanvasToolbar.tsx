@@ -5,6 +5,7 @@ import { ReactFlowState, XYPosition, getRectOfNodes, useStore } from 'reactflow'
 import { CanvasStore } from '../hooks/types';
 import { getAllowedToolbarActions } from '../toolbar';
 import { ActionsListType } from '../types';
+import { getSelectedEdges, getSelectedNodes } from '../utils';
 import ColorPicker from './ColorPicker';
 import './styles/CanvasToolbar.css';
 
@@ -27,15 +28,15 @@ const CanvasToolbar = ({ store }: Props) => {
     const position: XYPosition = { x: 0, y: 0 };
     let className = '';
 
-    if (store.getSelectedNodes().length > 0) {
-        const boundingBox = getRectOfNodes(store.getSelectedNodes());
+    if (getSelectedNodes(store.nodes).length > 0) {
+        const boundingBox = getRectOfNodes(getSelectedNodes(store.nodes));
         // TODO: this is off when multiple nodes are selected
         position.x = (boundingBox.x + boundingBox.width / 2) * transform[2] + transform[0]
         position.y = (boundingBox.y) * transform[2] + transform[1]
         className = 'node';
-    } else if (store.getSelectedEdges().length > 0) {
+    } else if (getSelectedEdges(store.edges).length > 0) {
         // if no nodes are selected, but edges are, position it based on them
-        store.getSelectedEdges().forEach(edge => {
+        getSelectedEdges(store.edges).forEach(edge => {
             const sourceNode = store.nodes.find((node) => node.id === edge.source);
             const targetNode = store.nodes.find((node) => node.id === edge.target);
             if (sourceNode && targetNode) {
@@ -62,7 +63,7 @@ const CanvasToolbar = ({ store }: Props) => {
         return () => {
             document.removeEventListener('click', handleDocumentClick);
         };
-    }, []);
+    }, [store]);
 
     const config: MenuItemConfig[] = useMemo(() => {
         return [

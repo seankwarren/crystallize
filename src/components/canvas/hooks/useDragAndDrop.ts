@@ -13,7 +13,8 @@ import {
 import ShortUniqueId from 'short-unique-id';
 import { NodeTypes, draggingCardNode, introNode } from '../nodes';
 import { getCenterNodeOnCoords, getDefaultNodeSize } from '../nodes/utils';
-import { CanvasStore } from './useCanvasState';
+import { drawSelectionHighlight } from '../utils';
+import { CanvasStore } from './types';
 import { HistoryItem } from './useUndoRedo';
 
 type Props = {
@@ -21,6 +22,7 @@ type Props = {
     takeSnapshot: (store: HistoryItem) => void;
 };
 
+//TODO: replace with nanoId();
 const uid = new ShortUniqueId({ length: 10 });
 
 const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
@@ -30,6 +32,10 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
             edges: store.edges,
         });
     }, [takeSnapshot, store]);
+
+    const onNodeDrag: NodeDragHandler = useCallback(() => {
+        drawSelectionHighlight(store);
+    }, [store]);
 
     const onSelectionDragStart: SelectionDragHandler = useCallback(() => {
         takeSnapshot({
@@ -118,7 +124,7 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
                 return;
             }
 
-            const type = draggedNode.data.draggedType as NodeTypes | undefined;
+            const type = draggedNode.data.draggedType;
 
             if (!type) {
                 console.warn("couldn't find dragged type");
@@ -172,7 +178,7 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
                 return;
             }
 
-            const type = draggedNode.data.draggedType as NodeTypes | undefined;
+            const type = draggedNode.data.draggedType;
 
             if (!type) {
                 console.warn("couldn't find dragged type");
@@ -214,6 +220,7 @@ const useDragAndDrop = ({ store, takeSnapshot }: Props) => {
 
     return {
         onNodeDragStart,
+        onNodeDrag,
         onSelectionDragStart,
         onNodesDelete,
         onEdgesDelete,

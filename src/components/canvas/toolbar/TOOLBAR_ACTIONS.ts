@@ -3,9 +3,13 @@ import { devLog } from '@utils/.';
 import { MouseEvent } from 'react';
 import { CanvasStore } from '../hooks/types';
 import { ActionsListType } from '../types';
+import { getSelectedEdges, getSelectedNodes } from '../utils';
 
 const removeElements = (store: CanvasStore) => {
-    store.deleteElements(store.getSelectedNodes(), store.getSelectedEdges());
+    store.deleteElements(
+        getSelectedNodes(store.nodes),
+        getSelectedEdges(store.edges)
+    );
     devLog('removing elements');
 };
 
@@ -14,7 +18,7 @@ const openPalette = (store: CanvasStore) => {
     devLog('opened palette');
 };
 const zoomToSelection = (store: CanvasStore) => {
-    store.fitViewToSelection(store.getSelectedNodes());
+    store.fitViewToSelection(getSelectedNodes(store.nodes));
     return;
 };
 const editLineDirection = (_store: CanvasStore) => {

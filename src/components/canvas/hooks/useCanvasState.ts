@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react';
-
 import { devLog } from '@utils/.';
+import { useRef, useState } from 'react';
 import {
     Connection,
     Edge,
@@ -18,6 +17,7 @@ import {
 import { NodeTypes } from '../nodes';
 import { ZOOM_DURATION } from '../styles/styles';
 import { ColorType, EdgeData, NodeData } from '../types';
+import { getSelectedNodes } from '../utils';
 import { CanvasState, CanvasStore } from './types';
 import { HistoryItem } from './useUndoRedo';
 
@@ -51,9 +51,6 @@ Props): CanvasStore => {
         alignNodesMenuOpen: false,
         alignNodesMenuPosition: { x: 0, y: 0 },
     };
-
-    // TODO: pull this out into our own store
-    // const { transform } = rfStore;
 
     const reactFlowInstance = useReactFlow<NodeData, EdgeData>();
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -100,9 +97,6 @@ Props): CanvasStore => {
         });
     };
 
-    const getSelectedNodes = (): Node<NodeData, NodeTypes>[] =>
-        nodes.filter((node) => node.selected);
-
     const setSelectedNodes = (selectedNodes: Node[]): void => {
         const selectedNodeIds = new Set(selectedNodes.map((n) => n.id));
         setNodes((nodes) => {
@@ -113,10 +107,9 @@ Props): CanvasStore => {
     };
 
     const alignNodesVertical = (direction: 'left' | 'right' | 'center') => {
-        const selectedNodes = getSelectedNodes();
-        if (selectedNodes.length === 0) return;
-
         setNodes((nodes) => {
+            const selectedNodes = getSelectedNodes(nodes);
+            if (selectedNodes.length === 0) return nodes;
             const boundingBox = getRectOfNodes(selectedNodes);
 
             return nodes.map((node) => {
@@ -157,10 +150,9 @@ Props): CanvasStore => {
     };
 
     const alignNodesHorizontal = (direction: 'top' | 'bottom' | 'middle') => {
-        const selectedNodes = getSelectedNodes();
-        if (selectedNodes.length === 0) return;
-
         setNodes((nodes) => {
+            const selectedNodes = getSelectedNodes(nodes);
+            if (selectedNodes.length === 0) return nodes;
             const boundingBox = getRectOfNodes(selectedNodes);
 
             return nodes.map((node) => {
@@ -227,7 +219,7 @@ Props): CanvasStore => {
         });
     };
 
-    const getSelectedEdges = () => edges.filter((node) => node.selected);
+    // const getSelectedEdges = (edges: Edge[]) => edges.filter((node) => node.selected);
 
     const setSelectedEdges = (selectedEdges: Edge[]) => {
         const selectedEdgeIds = new Set(selectedEdges.map((n) => n.id));
@@ -401,7 +393,7 @@ Props): CanvasStore => {
         addNodes,
         updateNode,
         onNodesChange,
-        getSelectedNodes,
+        // getSelectedNodes,
         setSelectedNodes,
         alignNodesVertical,
         alignNodesHorizontal,
@@ -413,7 +405,7 @@ Props): CanvasStore => {
         addEdges,
         updateEdge,
         onEdgesChange,
-        getSelectedEdges,
+        // getSelectedEdges,
         setSelectedEdges,
 
         deleteElements,
