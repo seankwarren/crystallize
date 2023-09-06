@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { devLog } from '@utils/.';
-// import { getRectOfNodes } from 'src/utils/utils';
 import { MouseEvent } from 'react';
-import { CanvasStore } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/types';
 import { ActionsListType } from '../types';
 
 const removeElements = (store: CanvasStore) => {
@@ -34,12 +33,9 @@ const openAlignNodesMenu = (store: CanvasStore, e: MouseEvent) => {
     const { clientX, clientY } = e;
     store.setAlignNodesMenuOpen(true);
     // TODO: fix this positioning
-    const menuPostition = store.project({ x: clientX, y: clientY });
-    const { zoom } = store.getViewport();
-    store.setAlignNodesMenuPosition({
-        top: menuPostition.y * zoom,
-        left: menuPostition.x * zoom,
-    });
+    const menuPosition = store.project({ x: clientX, y: clientY });
+    console.log(menuPosition);
+    store.setAlignNodesMenuPosition(menuPosition);
 };
 const setBackground = (_store: CanvasStore) => {
     devLog('setting background');

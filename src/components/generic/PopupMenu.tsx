@@ -1,6 +1,6 @@
 import { canvasOptionMenuIconSize } from '@components/canvas/styles/styles';
 import Icon, { IconName } from '@components/generic/Icon';
-import { CSSProperties } from 'react';
+import { CSSProperties, forwardRef } from 'react';
 import './styles/PopupMenu.css';
 
 export type MenuItemConfig = {
@@ -24,10 +24,10 @@ const MenuIcon = (name: IconName, className: string = '') => {
     )
 }
 
-const PopupMenu = ({ config, showIcons, style }: Props) => {
+const PopupMenu = forwardRef<HTMLDivElement, Props>(({ config, showIcons, style }, ref) => {
 
     return (
-        <div className="popup-menu" style={style}>
+        <div className="popup-menu" style={style} ref={ref}>
             {
                 config.map(({ title, iconName, value, showCheck, onClick, divider }) => {
                     return (
@@ -48,6 +48,6 @@ const PopupMenu = ({ config, showIcons, style }: Props) => {
             }
         </div >
     )
-}
+})
 
 export default PopupMenu

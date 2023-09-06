@@ -1,6 +1,6 @@
 import PopupMenu, { MenuItemConfig } from '@components/generic/PopupMenu';
 import NavigationIcon from '@components/layout/NavigationIcon';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ReactFlowState, XYPosition, getRectOfNodes, useStore } from 'reactflow';
 import { CanvasStore } from '../hooks/types';
 import { getAllowedToolbarActions } from '../toolbar';
@@ -19,6 +19,7 @@ const storeSelector = (store: ReactFlowState) => ({
 const CanvasToolbar = ({ store }: Props) => {
 
     const { transform } = useStore(storeSelector);
+    const alignNodeMenuRef = useRef<HTMLDivElement>(null);
 
     const actions: ActionsListType = getAllowedToolbarActions(store);
 
@@ -35,8 +36,8 @@ const CanvasToolbar = ({ store }: Props) => {
     } else if (store.getSelectedEdges().length > 0) {
         // if no nodes are selected, but edges are, position it based on them
         store.getSelectedEdges().forEach(edge => {
-            const sourceNode = store.nodes.find((n) => n.id === edge.source);
-            const targetNode = store.nodes.find((n) => n.id === edge.target);
+            const sourceNode = store.nodes.find((node) => node.id === edge.source);
+            const targetNode = store.nodes.find((node) => node.id === edge.target);
             if (sourceNode && targetNode) {
                 const boundingBox = getRectOfNodes([sourceNode, targetNode]);
                 position.x = (boundingBox.x + boundingBox.width / 2) * transform[2] + transform[0]
@@ -129,17 +130,15 @@ const CanvasToolbar = ({ store }: Props) => {
         ]
     }, [store]);
 
-    // const { x: left, y: top } = store.project({ x: store.alignNodesMenuPosition.top, y: store.alignNodesMenuPosition.left });
-
-    // console.log(left, top);
     return (
         <div className={`canvas-toolbar ${className}`} style={positionStyle}>
             <ColorPicker store={store} open={store.colorSelectorOpen} />
             <PopupMenu
                 config={config}
                 showIcons={true}
+                ref={alignNodeMenuRef}
                 style={{
-                    position: 'absolute',
+                    // position: 'absolute',
                     ...store.alignNodesMenuPosition,
                     display: store.alignNodesMenuOpen ? 'flex' : 'none'
                 }} />
