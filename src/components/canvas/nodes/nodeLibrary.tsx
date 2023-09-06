@@ -36,3 +36,13 @@ export const introNode: Node<NodeData, NodeTypes> = {
     connectable: false,
     position: { x: 0, y: 0 },
 };
+
+export const selectionNode: Node<NodeData, NodeTypes> = {
+    id: 'selection',
+    type: 'selection',
+    position: { x: 0, y: 0 },
+    selectable: false,
+    connectable: false,
+    draggable: true,
+    data: {},
+}

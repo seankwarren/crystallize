@@ -1,6 +1,6 @@
-import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
 import PopupMenu, { MenuItemConfig } from '@components/generic/PopupMenu';
 import { CSSProperties, useCallback, useMemo } from 'react';
+import { CanvasStore } from '../hooks/types';
 import './styles/CanvasOptions.css';
 type Props = {
     closeMenu: () => void;

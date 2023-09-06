@@ -1,21 +1,15 @@
 import { useCallback } from 'react';
-import { Handle, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
-import { maxNodeSize, minNodeSize } from '../styles/styles';
-import { ColorType, NodeData } from '../types';
-import './styles/NoteNode.css';
-
-type Props = {
-    id: string;
-    selected: boolean;
-    data: NodeData;
-}
+import { Handle, NodeProps, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
+import { maxNodeSize, minNodeSize } from '../../styles/styles';
+import { ColorType, NodeData } from '../../types';
+import '../styles/ImageNode.css';
 
 const handleStyle = {
     background: 'none',
     border: 'none',
 };
 
-const NoteNode = ({ id, selected, data }: Props) => {
+const ImageNode = ({ id, selected, data }: NodeProps<NodeData>) => {
 
     const { color, isResizable } = data;
 
@@ -39,10 +33,10 @@ const NoteNode = ({ id, selected, data }: Props) => {
     return (
         <div
             id={id}
-            className={`note-node ${selected && 'selected'} nowheel`}
+            className={`image-node ${selected && 'selected'} nowheel`}
             style={{ boxShadow: boxShadow(color) }}>
 
-            <div className={`note-node-backdrop ${selected && 'selected'}`} style={{ backgroundColor: color }}></div>
+            <div className={`image-node-backdrop ${selected && 'selected'}`} style={{ backgroundColor: color }}></div>
 
 
             <NodeResizeControl
@@ -171,10 +165,10 @@ const NoteNode = ({ id, selected, data }: Props) => {
             <Handle type="source" position={Position.Right} id={`${id}-right`} />
             <Handle type="source" position={Position.Bottom} id={`${id}-bottom`} />
 
-            <div className='note-node-content'>{data.label}</div>
+            <div className='image-node-content'>{data.label}</div>
 
         </ div>
     )
 }
 
-export default NoteNode
+export default ImageNode;

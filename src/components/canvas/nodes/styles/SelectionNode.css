@@ -1,0 +1,10 @@
+.selection-node {
+    display: flex;
+    background-color: var(--dark-bg-color);
+    padding: var(--sm-spacing);
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1000;
+}

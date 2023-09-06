@@ -1,17 +1,21 @@
-import BaseNode from './BaseNode';
-import CardNode from './CardNode';
-import GroupNode from './GroupNode';
-import ImageNode from './ImageNode';
-import NoteNode from './NoteNode';
+import CardNode from './custom/CardNode';
+import DraggingNode from './custom/DraggingNode';
+import GroupNode from './custom/GroupNode';
+import ImageNode from './custom/ImageNode';
+import IntroNode from './custom/IntroNode';
+import NoteNode from './custom/NoteNode';
+import SelectionNode from './custom/SelectionNode';
 import { draggingCardNode, introNode } from './nodeLibrary';
 import nodeTypes, { NodeTypes } from './nodeTypes';
 
 export {
-    BaseNode,
     CardNode,
+    DraggingNode,
     GroupNode,
     ImageNode,
+    IntroNode,
     NoteNode,
+    SelectionNode,
     draggingCardNode,
     introNode,
     nodeTypes,

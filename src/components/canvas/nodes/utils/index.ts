@@ -1,4 +1,5 @@
-import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
+// import { CanvasStore } from '@components/canvas/hooks/useCanvasState';
+import { CanvasStore } from '@components/canvas/hooks/types';
 import {
     defaultCardNodeHeight,
     defaultCardNodeWidth,

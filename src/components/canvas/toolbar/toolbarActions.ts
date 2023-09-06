@@ -1,8 +1,9 @@
 import { ActionsListType } from '@components/canvas/types';
 import { Edge, Node } from 'reactflow';
 import { EdgeTypes } from '../edges';
-import { CanvasStore } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/types';
 import { NodeTypes } from '../nodes';
+import { getSelectedEdges, getSelectedNodes } from '../utils';
 import { TOOLBAR_ACTIONS } from './TOOLBAR_ACTIONS';
 
 const allTypesMatch = (
@@ -24,15 +25,15 @@ const someTypesMatch = (
 };
 
 export const getAllowedToolbarActions = (
-    state: CanvasStore
+    store: CanvasStore
 ): ActionsListType => {
     const filteredActions = Object.entries(TOOLBAR_ACTIONS).filter(
         ([, action]) => {
-            const numNodes = state.getSelectedNodes().length;
-            const numEdges = state.getSelectedEdges().length;
+            const numNodes = getSelectedNodes(store.nodes).length;
+            const numEdges = getSelectedEdges(store.edges).length;
 
             const allNodesMatchTypes = allTypesMatch(
-                state.getSelectedNodes(),
+                getSelectedNodes(store.nodes),
                 action.allowedNodeTypes
             );
             // const allEdgesMatchTypes = allTypesMatch(
@@ -40,15 +41,15 @@ export const getAllowedToolbarActions = (
             //     action.allowedEdgeTypes
             // );
             const someNodesMatchTypes = someTypesMatch(
-                state.getSelectedNodes(),
+                getSelectedNodes(store.nodes),
                 action.allowedNodeTypes
             );
             const someEdgesMatchTypes = someTypesMatch(
-                state.getSelectedEdges(),
+                getSelectedEdges(store.edges),
                 action.allowedEdgeTypes
             );
 
-            if (action.isEditAction && !state.isInteractive) {
+            if (action.isEditAction && !store.isInteractive) {
                 return false;
             }
 

@@ -1,21 +1,15 @@
 import { useCallback } from 'react';
-import { Handle, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
-import { maxNodeSize, minNodeSize } from '../styles/styles';
-import { ColorType, NodeData } from '../types';
-import './styles/CardNode.css';
-
-type Props = {
-    id: string;
-    selected: boolean;
-    data: NodeData;
-}
+import { Handle, NodeProps, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
+import { maxNodeSize, minNodeSize } from '../../styles/styles';
+import { ColorType, NodeData } from '../../types';
+import '../styles/CardNode.css';
 
 const handleStyle = {
     background: 'none',
     border: 'none',
 };
 
-const CardNode = ({ id, selected, data }: Props) => {
+const CardNode = ({ id, selected, data }: NodeProps<NodeData>) => {
 
     const { color, isResizable } = data;
 

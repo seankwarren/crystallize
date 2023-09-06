@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { devLog } from '@utils/.';
-// import { getRectOfNodes } from 'src/utils/utils';
 import { MouseEvent } from 'react';
-import { CanvasStore } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/types';
 import { ActionsListType } from '../types';
+import { getSelectedEdges, getSelectedNodes } from '../utils';
 
 const removeElements = (store: CanvasStore) => {
-    store.deleteElements(store.getSelectedNodes(), store.getSelectedEdges());
+    store.deleteElements(
+        getSelectedNodes(store.nodes),
+        getSelectedEdges(store.edges)
+    );
     devLog('removing elements');
 };
 
@@ -15,7 +18,7 @@ const openPalette = (store: CanvasStore) => {
     devLog('opened palette');
 };
 const zoomToSelection = (store: CanvasStore) => {
-    store.fitViewToSelection(store.getSelectedNodes());
+    store.fitViewToSelection(getSelectedNodes(store.nodes));
     return;
 };
 const editLineDirection = (_store: CanvasStore) => {
@@ -34,12 +37,9 @@ const openAlignNodesMenu = (store: CanvasStore, e: MouseEvent) => {
     const { clientX, clientY } = e;
     store.setAlignNodesMenuOpen(true);
     // TODO: fix this positioning
-    const menuPostition = store.project({ x: clientX, y: clientY });
-    const { x, y, zoom } = store.getViewport();
-    store.setAlignNodesMenuPosition({
-        top: menuPostition.y * zoom,
-        left: menuPostition.x * zoom,
-    });
+    const menuPosition = store.project({ x: clientX, y: clientY });
+    console.log(menuPosition);
+    store.setAlignNodesMenuPosition(menuPosition);
 };
 const setBackground = (_store: CanvasStore) => {
     devLog('setting background');
@@ -101,9 +101,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
     alignChildren: {
         title: 'Align',
         icon: 'AlignStartVertical',
-        onClick: (store, e) => {
-            openAlignNodesMenu(store, e);
-        },
+        onClick: openAlignNodesMenu,
         allowedNodeTypes: ['group'],
         allowedEdgeTypes: [],
         isEditAction: true,
@@ -116,9 +114,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
     alignSelection: {
         title: 'Align',
         icon: 'AlignStartVertical',
-        onClick: (store, e) => {
-            openAlignNodesMenu(store, e);
-        },
+        onClick: openAlignNodesMenu,
         allowedNodeTypes: ['note', 'card', 'image', 'group'],
         allowedEdgeTypes: [],
         isEditAction: true,
