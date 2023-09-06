@@ -1,13 +1,11 @@
-import BaseNode from './BaseNode';
-import CardNode from './CardNode';
-import GroupNode from './GroupNode';
-import ImageNode from './ImageNode';
-import NoteNode from './NoteNode';
+import CardNode from './custom/CardNode';
+import GroupNode from './custom/GroupNode';
+import ImageNode from './custom/ImageNode';
+import NoteNode from './custom/NoteNode';
 import { draggingCardNode, introNode } from './nodeLibrary';
 import nodeTypes, { NodeTypes } from './nodeTypes';
 
 export {
-    BaseNode,
     CardNode,
     GroupNode,
     ImageNode,

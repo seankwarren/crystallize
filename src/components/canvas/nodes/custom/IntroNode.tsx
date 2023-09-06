@@ -1,5 +1,5 @@
-import { NodeData } from '../types';
-import './styles/IntroNode.css';
+import { NodeData } from '../../types';
+import '../styles/IntroNode.css';
 
 type Props = {
     id: string,
