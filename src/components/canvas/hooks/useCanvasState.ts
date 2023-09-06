@@ -1,4 +1,4 @@
-import { RefObject, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { devLog } from '@utils/.';
 import {
@@ -7,7 +7,7 @@ import {
     EdgeChange,
     Node,
     NodeChange,
-    ViewportHelperFunctions,
+    XYPosition,
     applyEdgeChanges,
     applyNodeChanges,
     getConnectedEdges,
@@ -18,67 +18,8 @@ import {
 import { NodeTypes } from '../nodes';
 import { ZOOM_DURATION } from '../styles/styles';
 import { ColorType, EdgeData, NodeData } from '../types';
+import { CanvasState, CanvasStore } from './types';
 import { HistoryItem } from './useUndoRedo';
-
-/**
- * Represents the state, and state manipulating functions of a canvas.
- */
-
-export type CanvasState = {
-    nodes: Node<NodeData, NodeTypes>[];
-    edges: Edge<EdgeData>[];
-    snapToGrid: boolean;
-    snapToObjects: boolean;
-    isInteractive: boolean;
-    colorSelectorOpen: boolean;
-    alignNodesMenuOpen: boolean;
-    alignNodesMenuPosition: { top: number; left: number };
-};
-
-export type CanvasStore = CanvasState & {
-    canvasRef: RefObject<HTMLDivElement>;
-
-    setNodes: React.Dispatch<React.SetStateAction<Node<NodeData, NodeTypes>[]>>;
-    getNode: (id: string) => Node<NodeData, NodeTypes> | undefined;
-    addNode: (node: Node<NodeData, NodeTypes>) => void;
-    addNodes: (nodes: Node<NodeData, NodeTypes>[]) => void;
-    onNodesChange: (changes: NodeChange[]) => void;
-    updateNode: (nodeId: string, changes: NodeChange[]) => void;
-    getSelectedNodes: () => Node<NodeData, NodeTypes>[];
-    setSelectedNodes: (selectedNodes: Node[]) => void;
-    alignNodesVertical: (direction: 'left' | 'right' | 'center') => void;
-    alignNodesHorizontal: (direction: 'top' | 'bottom' | 'middle') => void;
-
-    setEdges: React.Dispatch<React.SetStateAction<Edge<EdgeData>[]>>;
-    getEdge: (id: string) => Edge<EdgeData> | undefined;
-    addEdge: (edge: Edge<EdgeData>) => void;
-    addEdges: (edges: Edge<EdgeData>[]) => void;
-    onEdgesChange: (changes: EdgeChange[]) => void;
-    updateEdge: (edgeId: string, changes: EdgeChange[]) => void;
-    getSelectedEdges: () => Edge[];
-    setSelectedEdges: (selectedEdges: Edge[]) => void;
-
-    deleteElements: (nodes: Node[], edges: Edge[]) => void;
-    onConnect: (params: Edge | Connection) => void;
-
-    fitViewToSelection: (nodes?: Node<NodeData, NodeTypes>[]) => void;
-
-    toggleSnapToGrid: () => void;
-    toggleSnapToObjects: () => void;
-    toggleIsInteractive: () => void;
-
-    setColorSelectorOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setColors: (
-        color: ColorType,
-        selectedNodes: Node<NodeData, NodeTypes>[],
-        selectedEdges: Edge[]
-    ) => void;
-
-    setAlignNodesMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setAlignNodesMenuPosition: React.Dispatch<
-        React.SetStateAction<{ top: number; left: number }>
-    >;
-} & ViewportHelperFunctions;
 
 type Props = {
     initialState?: CanvasState;
@@ -108,7 +49,7 @@ Props): CanvasStore => {
         isInteractive: true,
         colorSelectorOpen: false,
         alignNodesMenuOpen: false,
-        alignNodesMenuPosition: { top: 0, left: 0 },
+        alignNodesMenuPosition: { x: 0, y: 0 },
     };
 
     // TODO: pull this out into our own store
@@ -120,10 +61,6 @@ Props): CanvasStore => {
         initialState.nodes
     );
     const [edges, setEdges] = useState<Edge<EdgeData>[]>(initialState.edges);
-    const [alignNodesMenuPosition, setAlignNodesMenuPosition] = useState<{
-        top: number;
-        left: number;
-    }>({ top: 0, left: 0 });
 
     const addNodes = (nodes: Node<NodeData, NodeTypes>[]) => {
         setNodes((prev) => [...prev, ...nodes]);
@@ -449,6 +386,9 @@ Props): CanvasStore => {
     const [alignNodesMenuOpen, setAlignNodesMenuOpen] = useState<boolean>(
         initialState.alignNodesMenuOpen
     );
+
+    const [alignNodesMenuPosition, setAlignNodesMenuPosition] =
+        useState<XYPosition>({ x: 0, y: 0 });
 
     return {
         ...reactFlowInstance,

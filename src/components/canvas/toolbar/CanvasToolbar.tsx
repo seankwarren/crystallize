@@ -2,7 +2,7 @@ import PopupMenu, { MenuItemConfig } from '@components/generic/PopupMenu';
 import NavigationIcon from '@components/layout/NavigationIcon';
 import { useEffect, useMemo } from 'react';
 import { ReactFlowState, XYPosition, getRectOfNodes, useStore } from 'reactflow';
-import { CanvasStore } from '../hooks/useCanvasState';
+import { CanvasStore } from '../hooks/types';
 import { getAllowedToolbarActions } from '../toolbar';
 import { ActionsListType } from '../types';
 import ColorPicker from './ColorPicker';
