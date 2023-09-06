@@ -1,13 +1,6 @@
 import { NodeProps, useStore } from 'reactflow';
 import '../styles/SelectionNode.css';
 
-type Props = {
-    id: string;
-    selected: boolean;
-    width: number;
-    height: number;
-}
-
 const boxShadow = '0px 0px 0px calc(var(--xl-border-width)) var(--intro-node-color)'
 
 const SelectionNode = ({ id, selected }: NodeProps) => {

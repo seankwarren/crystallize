@@ -1,21 +1,15 @@
 import { useCallback } from 'react';
-import { Handle, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
+import { Handle, NodeProps, NodeResizeControl, Position, ResizeControlVariant } from 'reactflow';
 import { maxNodeSize, minNodeSize } from '../../styles/styles';
 import { ColorType, NodeData } from '../../types';
 import '../styles/NoteNode.css';
-
-type Props = {
-    id: string;
-    selected: boolean;
-    data: NodeData;
-}
 
 const handleStyle = {
     background: 'none',
     border: 'none',
 };
 
-const NoteNode = ({ id, selected, data }: Props) => {
+const NoteNode = ({ id, selected, data }: NodeProps<NodeData>) => {
 
     const { color, isResizable } = data;
 

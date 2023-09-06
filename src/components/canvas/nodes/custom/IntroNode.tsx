@@ -1,12 +1,8 @@
+import { NodeProps } from 'reactflow';
 import { NodeData } from '../../types';
 import '../styles/IntroNode.css';
 
-type Props = {
-    id: string,
-    data: NodeData
-}
-
-const IntroNode = ({ id, data }: Props) => {
+const IntroNode = ({ id, data }: NodeProps<NodeData>) => {
 
     const { label } = data;
 

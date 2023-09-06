@@ -1,10 +1,8 @@
+import { NodeProps } from 'reactflow';
 import { NodeData } from '../../types';
 import '../styles/DraggingNode.css';
-type Props = {
-    data: NodeData
-}
 
-const DraggingNode = ({ data }: Props) => {
+const DraggingNode = ({ data }: NodeProps<NodeData>) => {
 
     let style = {};
     switch (data.draggedType) {
