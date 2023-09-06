@@ -35,7 +35,7 @@ const openAlignNodesMenu = (store: CanvasStore, e: MouseEvent) => {
     store.setAlignNodesMenuOpen(true);
     // TODO: fix this positioning
     const menuPostition = store.project({ x: clientX, y: clientY });
-    const { x, y, zoom } = store.getViewport();
+    const { zoom } = store.getViewport();
     store.setAlignNodesMenuPosition({
         top: menuPostition.y * zoom,
         left: menuPostition.x * zoom,
@@ -101,9 +101,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
     alignChildren: {
         title: 'Align',
         icon: 'AlignStartVertical',
-        onClick: (store, e) => {
-            openAlignNodesMenu(store, e);
-        },
+        onClick: openAlignNodesMenu,
         allowedNodeTypes: ['group'],
         allowedEdgeTypes: [],
         isEditAction: true,
@@ -116,9 +114,7 @@ export const TOOLBAR_ACTIONS: ActionsListType = {
     alignSelection: {
         title: 'Align',
         icon: 'AlignStartVertical',
-        onClick: (store, e) => {
-            openAlignNodesMenu(store, e);
-        },
+        onClick: openAlignNodesMenu,
         allowedNodeTypes: ['note', 'card', 'image', 'group'],
         allowedEdgeTypes: [],
         isEditAction: true,

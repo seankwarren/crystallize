@@ -51,12 +51,12 @@ const CanvasToolbar = ({ store }: Props) => {
         left: position.x,
     }
 
-    const handleDocumentClick: EventListener = () => {
-        console.log('handleDocumentClick');
-        store.setAlignNodesMenuOpen(false);
-    };
-
     useEffect(() => {
+        const handleDocumentClick: EventListener = () => {
+            console.log('handleDocumentClick');
+            store.setAlignNodesMenuOpen(false);
+        };
+
         document.addEventListener('click', handleDocumentClick);
         return () => {
             document.removeEventListener('click', handleDocumentClick);
@@ -70,7 +70,7 @@ const CanvasToolbar = ({ store }: Props) => {
                 iconName: 'AlignStartVertical',
                 value: false,
                 showCheck: false,
-                onClick: (e) => {
+                onClick: () => {
                     store.alignNodesVertical('left');
                     store.setAlignNodesMenuOpen(false);
                 },
