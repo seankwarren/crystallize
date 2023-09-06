@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Edge, Node } from 'reactflow';
+import { NodeTypes } from '../nodes';
+import { NodeData } from '../types';
 import { CanvasStore } from './types';
 
 type UseUndoRedoOptions = {
@@ -16,7 +18,7 @@ type UseUndoRedo = (options: UseUndoRedoOptions) => {
 };
 
 export type HistoryItem = {
-    nodes: Node[];
+    nodes: Node<NodeData, NodeTypes>[];
     edges: Edge[];
 };
 
