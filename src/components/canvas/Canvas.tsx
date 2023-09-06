@@ -3,6 +3,7 @@ import ReactFlow, {
     Background,
     ConnectionMode,
     SelectionMode,
+    getRectOfNodes,
     useOnSelectionChange
 } from 'reactflow';
 import 'reactflow/dist/style.css';
@@ -10,6 +11,7 @@ import { CanvasControls, CanvasNodeMenu } from '.';
 import { edgeTypes } from './edges';
 import { useCanvasState, useDragAndDrop, useUndoRedo } from './hooks';
 import { introNode, nodeTypes } from './nodes';
+import { selectionNode } from './nodes/nodeLibrary';
 import HelperLines from './overlays/CanvasHelperLines';
 import './styles/Canvas.css';
 import { snapGridInterval } from './styles/styles';
@@ -36,16 +38,19 @@ const Canvas = () => {
         isInteractive: true,
         colorSelectorOpen: false,
         alignNodesMenuOpen: false,
-        alignNodesMenuPosition: { top: 0, left: 0 },
+        alignNodesMenuPosition: { x: 0, y: 0 },
     }
     const store = useCanvasState({ initialState, takeSnapshot });
 
     const {
         canvasRef,
+        nodes,
         setNodes,
+        addNodes,
         setSelectedNodes,
         setEdges,
         setSelectedEdges,
+        deleteElements,
         onNodesChange,
         onEdgesChange,
         onConnect,
@@ -65,9 +70,21 @@ const Canvas = () => {
     } = useDragAndDrop({ store, takeSnapshot });
 
     useOnSelectionChange({
-        onChange: ({ nodes, edges }) => {
-            setSelectedNodes(nodes);
+        onChange: ({ nodes: selectedNodes, edges }) => {
+            setSelectedNodes(selectedNodes);
             setSelectedEdges(edges);
+            deleteElements([selectionNode], []);
+            if (selectedNodes.length > 1) {
+                const { x, y, width, height } = getRectOfNodes(selectedNodes);
+                addNodes([{
+                    ...selectionNode,
+                    position: { x: x - 10, y: y - 10 },
+                    hidden: false,
+                    width: width + 20,
+                    height: height + 20,
+                }]);
+                console.log(nodes.map((n => n.id)))
+            }
         }
     });
 

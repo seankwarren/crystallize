@@ -28,6 +28,7 @@ body {
     --intro-node-width: 260px;
     --intro-node-height: 100px;
     --intro-node-color: rgba(168, 130, 255, 0.2);
+    --selection-node-color: rgba(168, 130, 255, 0.05);
 
     --default-card-node-width: 360px;
     --default-card-node-height: 120px;
